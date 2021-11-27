@@ -28,15 +28,15 @@ public class ParseData {
 
     private List<Movie> movies;
     private List<Serial> serials;
-    private List<UserInputData> users;
+    private List<User> users;
     private List<ActorInputData> actors;
     private List<ActionInputData> actions;
 
-    public List<UserInputData> getUsers() {
+    public List<User> getUsers() {
         return users;
     }
 
-    public void setUsers(List<UserInputData> users) {
+    public void setUsers(List<User> users) {
         this.users = users;
     }
 
@@ -69,7 +69,10 @@ public class ParseData {
             Serial newSerial = new Serial(serial);
             serials.add(newSerial);
         }
-        this.users = input.getUsers();
+        this.users = new ArrayList<>();
+        for (UserInputData user : input.getUsers()) {
+            this.users.add(new User(user));
+        }
         this.actors = input.getActors();
         this.actions = input.getCommands();
         this.movies = movies;

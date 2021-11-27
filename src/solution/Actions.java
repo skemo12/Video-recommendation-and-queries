@@ -8,7 +8,13 @@ import org.json.simple.JSONArray;
 import solution.commands.Favorite;
 import solution.commands.Rating;
 import solution.commands.View;
-import solution.query.actors.ActorsQuery;
+import solution.query.actors.Actors;
+import solution.query.users.NumberOfRatingsQuery;
+import solution.query.videos.Videos;
+import solution.recommendation.*;
+import solution.recommendation.premium.FavoriteRecommendation;
+import solution.recommendation.premium.Popular;
+import solution.recommendation.premium.Search;
 
 import java.io.IOException;
 
@@ -44,11 +50,57 @@ public final class Actions {
             }
             if (action.getActionType().equalsIgnoreCase("query")) {
                 if (action.getObjectType().equalsIgnoreCase("actors")) {
-                    ActorsQuery.getActorsQuery().checkQuery(action, data,
+                    Actors.getActorsQuery().checkQuery(action, data,
                             fileWriter, arrayResult);
                 }
             }
 
+            if (action.getActionType().equalsIgnoreCase("query")) {
 
+                if (action.getObjectType().equalsIgnoreCase("movies")) {
+                    Videos.getVideos().checkQuery(action, data,
+                            fileWriter, arrayResult);
+                }
+
+                if (action.getObjectType().equalsIgnoreCase("shows")) {
+                    Videos.getVideos().checkQuery(action, data,
+                            fileWriter, arrayResult);
+                }
+
+                if (action.getObjectType().equalsIgnoreCase("users")) {
+                    NumberOfRatingsQuery.getInstance().numberOfRatingsQuery(action, data,
+                            fileWriter, arrayResult);
+                }
+
+            }
+
+            if (action.getActionType().equalsIgnoreCase("recommendation")) {
+                if (action.getType().equalsIgnoreCase("standard")) {
+                    Standard.getInstance().getRecomandation(action, data,
+                            fileWriter, arrayResult);
+                }
+
+                if (action.getType().equalsIgnoreCase("best_unseen")) {
+                    BestUnseen.getInstance().getRecommendation(action, data,
+                            fileWriter, arrayResult);
+                }
+
+                if (action.getType().equalsIgnoreCase("popular")) {
+                    Popular.getInstance().getRecommendation(action, data,
+                            fileWriter, arrayResult);
+                }
+                if (action.getType().equalsIgnoreCase("favorite")) {
+                    FavoriteRecommendation.getInstance().getRecommendation(action, data,
+                            fileWriter, arrayResult);
+                }
+                if (action.getType().equalsIgnoreCase("search")) {
+                    Search.getInstance().getRecommendation(action, data,
+                            fileWriter, arrayResult);
+                }
+
+            }
+
+
+
+        }
     }
-}

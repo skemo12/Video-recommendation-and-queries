@@ -1,9 +1,6 @@
 package solution;
 
-import fileio.ActorInputData;
-import fileio.MovieInputData;
-import fileio.SerialInputData;
-import fileio.UserInputData;
+import fileio.*;
 
 import java.util.List;
 
@@ -19,9 +16,9 @@ public final class Utility {
         return utility;
     }
 
-    public UserInputData getUserByName(final List<UserInputData> users,
+    public User getUserByName(final List<User> users,
                                        final String username) {
-        for (UserInputData user : users) {
+        for (User user : users) {
             if (user.getUsername().equalsIgnoreCase(username)) {
                 return user;
             }
@@ -57,5 +54,21 @@ public final class Utility {
             }
         }
         return null;
+    }
+
+    public void updateFavorite(ParseData data) {
+        for (User user : data.getUsers()) {
+            for (String favorite : user.getFavoriteMovies()) {
+                Movie movie = getMovieByTitle(data.getMovies(), favorite);
+                if (movie != null) {
+                    movie.setFavoriteAddCount(movie.getFavoriteAddCount() + 1);
+                }
+                Serial serial = getSerialByTitle(data.getSerials(), favorite);
+                if (serial != null) {
+                    serial.setFavoriteAddCount(serial.getFavoriteAddCount() + 1);
+                }
+            }
+
+        }
     }
 }

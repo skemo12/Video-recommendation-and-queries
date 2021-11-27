@@ -1,23 +1,12 @@
 package solution.commands;
 
 
-import entertainment.Season;
-import fileio.MovieInputData;
-import fileio.UserInputData;
 import fileio.ActionInputData;
-import fileio.SerialInputData;
-import fileio.Input;
 import fileio.Writer;
 import org.json.simple.JSONArray;
-import solution.Movie;
-import solution.ParseData;
-import solution.Serial;
-import solution.Utility;
+import solution.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public final class Rating {
@@ -46,7 +35,7 @@ public final class Rating {
             throws IOException {
         String username = command.getUsername();
         String title = command.getTitle();
-        UserInputData user = Utility.getUtility().getUserByName(data.getUsers(),
+        User user = Utility.getUtility().getUserByName(data.getUsers(),
                 username);
         Movie movie = Utility.getUtility().getMovieByTitle(data.getMovies(),
                 title);
@@ -80,6 +69,13 @@ public final class Rating {
                 }
                 grade = grade / count;
                 movie.setRating(grade);
+                user.setNumberOfRatings(user.getNumberOfRatings() + 1);
+            } else {
+                String outputMessage = "error -> " + title
+                        + " is not seen";
+                arrayResult.add(fileWriter.writeFile(command.getActionId(),
+                        "no field", outputMessage));
+
             }
         }
 
@@ -119,6 +115,12 @@ public final class Rating {
                 }
                 grade = grade / serial.getNumberOfSeasons();
                 serial.setRating(grade);
+                user.setNumberOfRatings(user.getNumberOfRatings() + 1);
+            } else {
+                String outputMessage = "error -> " + title
+                        + " is not seen";
+                arrayResult.add(fileWriter.writeFile(command.getActionId(),
+                        "no field", outputMessage));
 
             }
         }

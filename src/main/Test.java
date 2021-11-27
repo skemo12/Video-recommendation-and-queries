@@ -29,7 +29,7 @@ public final class Test {
             Arrays.sort(inputDir);
 
             Scanner scanner = new Scanner(System.in);
-            String fileName = "single_query_average_actors.json";
+            String fileName = "recommendation_invalid_user.json";
 
             for (File file : inputDir) {
                 if (file.getName().equalsIgnoreCase(fileName)) {

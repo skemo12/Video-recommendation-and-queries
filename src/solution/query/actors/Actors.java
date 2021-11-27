@@ -6,15 +6,15 @@ import solution.ParseData;
 
 import java.io.IOException;
 
-public class ActorsQuery {
+public class Actors {
 
     /**
      * Singleton class
      */
-    private static ActorsQuery actorsQuery = null;
-    public static ActorsQuery getActorsQuery() {
+    private static Actors actorsQuery = null;
+    public static Actors getActorsQuery() {
         if (actorsQuery == null) {
-            actorsQuery = new ActorsQuery();
+            actorsQuery = new Actors();
         }
         return actorsQuery;
     }
@@ -25,12 +25,12 @@ public class ActorsQuery {
                            final JSONArray arrayResult) throws IOException {
 
         if (command.getCriteria().equalsIgnoreCase("average")) {
-            AverageQuery.getAverageQuery().averageQuery(command, data,
+            Average.getAverageQuery().averageQuery(command, data,
                     fileWriter, arrayResult);
         }
 
         if (command.getCriteria().equalsIgnoreCase("awards")) {
-            AwardsQuery.getAwardsQuery().awardsQuery(command, data,
+            Awards.getAwardsQuery().awardsQuery(command, data,
                     fileWriter, arrayResult);
         }
 

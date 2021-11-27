@@ -28,11 +28,14 @@ public class FilterDescription {
             boolean ok = true;
             String description = actor.getCareerDescription();
             List<String> filters = command.getFilters().get(2);
-            for (String filter : filters) {
-                if (!description.contains(filter)) {
-                    ok = false;
+            if (filters != null) {
+                for (String filter : filters) {
+                    if (!description.contains(filter)) {
+                        ok = false;
+                    }
                 }
             }
+
             if (ok) {
                 outputActors.add(actor.getName());
             }

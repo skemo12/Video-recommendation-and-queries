@@ -10,12 +10,12 @@ import solution.ParseData;
 import java.io.IOException;
 import java.util.*;
 
-public class AwardsQuery {
+public class Awards {
 
-    private static AwardsQuery awardsQuery = null;
-    public static AwardsQuery getAwardsQuery() {
+    private static Awards awardsQuery = null;
+    public static Awards getAwardsQuery() {
         if (awardsQuery == null) {
-            awardsQuery = new AwardsQuery();
+            awardsQuery = new Awards();
         }
         return awardsQuery;
     }

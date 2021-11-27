@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class AverageQuery {
+public class Average {
 
-    private static AverageQuery averageQuery = null;
-    public static AverageQuery getAverageQuery() {
+    private static Average averageQuery = null;
+    public static Average getAverageQuery() {
         if (averageQuery == null) {
-            averageQuery = new AverageQuery();
+            averageQuery = new Average();
         }
         return averageQuery;
     }
@@ -55,19 +55,19 @@ public class AverageQuery {
         }
         if (command.getSortType().equalsIgnoreCase("asc")) {
             Collections.sort(actorsRatings, (o1, o2) -> {
-                if (o1.grade > o2.grade) {
-                    return 1;
-                } else if (o2.grade > o1.grade) {
+                if (Double.compare(o1.grade, o2.grade) < 0) {
                     return -1;
+                } else if (Double.compare(o1.grade, o2.grade) > 0) {
+                    return 1;
                 } else return o1.name.compareToIgnoreCase(o2.name);
 
             });
         } else {
             Collections.sort(actorsRatings, (o1, o2) -> {
-                if (o1.grade > o2.grade) {
-                    return -1;
-                } else if (o2.grade > o1.grade) {
+                if (Double.compare(o1.grade, o2.grade) < 0) {
                     return 1;
+                } else if (Double.compare(o1.grade, o2.grade) > 0) {
+                    return -1;
                 } else return o2.name.compareToIgnoreCase(o1.name);
 
             });

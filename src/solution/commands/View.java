@@ -6,6 +6,7 @@ import fileio.UserInputData;
 import fileio.Writer;
 import org.json.simple.JSONArray;
 import solution.ParseData;
+import solution.User;
 import solution.Utility;
 
 import java.io.IOException;
@@ -28,7 +29,7 @@ public class View {
             throws IOException {
         String username = command.getUsername();
         String title = command.getTitle();
-        UserInputData user = Utility.getUtility().getUserByName(data.getUsers(),
+        User user = Utility.getUtility().getUserByName(data.getUsers(),
                 username);
         Map<String, Integer> history = user.getHistory();
 

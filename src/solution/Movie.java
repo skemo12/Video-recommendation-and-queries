@@ -8,22 +8,13 @@ import java.util.List;
 
 public class Movie extends Show{
 
-    private int duration;
-    private List<UserInputData> ratingUsers;
+    private List<User> ratingUsers;
 
     private List<Double> ratingsList;
 
-    public Movie(String title, int year, ArrayList<String> cast, ArrayList<String> genres, int duration) {
-        super(title, year, cast, genres);
-        this.duration = duration;
-        this.ratingUsers = new ArrayList<>();
-        this.ratingsList = new ArrayList<>();
-    }
-
     public Movie(MovieInputData movie) {
         super(movie.getTitle(), movie.getYear(), movie.getCast(),
-                movie.getGenres());
-        this.duration = movie.getDuration();
+                movie.getGenres(),0.0, movie.getDuration());
         this.ratingUsers = new ArrayList<>();
         this.ratingsList = new ArrayList<>();
     }
@@ -36,19 +27,11 @@ public class Movie extends Show{
         this.ratingsList = ratingsList;
     }
 
-    public int getDuration() {
-        return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
-    public List<UserInputData> getRatingUsers() {
+    public List<User> getRatingUsers() {
         return ratingUsers;
     }
 
-    public void setRatingUsers(List<UserInputData> ratingUsers) {
+    public void setRatingUsers(List<User> ratingUsers) {
         this.ratingUsers = ratingUsers;
     }
 
