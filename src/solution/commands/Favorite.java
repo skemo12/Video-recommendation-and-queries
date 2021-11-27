@@ -1,17 +1,21 @@
-package commands;
+package solution.commands;
 
 import fileio.ActionInputData;
 import fileio.Input;
 import fileio.UserInputData;
+import fileio.Writer;
+import org.json.simple.JSONArray;
+import solution.ParseData;
+import solution.Utility;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
-public class Favorite {
+public final class Favorite {
 
-    // TODO: make it Singleton
+    // make it Singleton
     private static Favorite favorite = null;
-
     public static Favorite getFavorite() {
         if (favorite == null) {
             favorite = new Favorite();
@@ -19,11 +23,37 @@ public class Favorite {
         return favorite;
     }
 
-    public void addFavorite(ActionInputData command, Input input){
+    public void addFavorite(final ActionInputData command, ParseData data,
+                            final Writer fileWriter,
+                            final JSONArray arrayResult)
+            throws IOException {
+
         String username = command.getUsername();
-        List<UserInputData> users = input.getUsers();
         String title = command.getTitle();
-        UserInputData user = users.getUsername("username");
+        UserInputData user = Utility.getUtility().getUserByName(data.getUsers(),
+                username);
+        Map<String, Integer> history = user.getHistory();
+
+        if (history.containsKey(title)) {
+            if (!user.getFavoriteMovies().contains(title)) {
+                user.getFavoriteMovies().add(title);
+                String outputMessage = "success -> " + title
+                            + " was added as favourite";
+                arrayResult.add(fileWriter.writeFile(command.getActionId(),
+                        "no field", outputMessage));
+                } else {
+                    String outputMessage = "error -> " + title
+                            + " is already in favourite list";
+                    arrayResult.add(fileWriter.writeFile(command.getActionId(),
+                            "no field", outputMessage));
+
+                }
+            } else {
+                String outputMessage = "error -> " + title
+                        + " is not seen";
+                arrayResult.add(fileWriter.writeFile(command.getActionId(),
+                        "no field", outputMessage));
+            }
 
 
     }

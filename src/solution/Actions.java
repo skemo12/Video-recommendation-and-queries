@@ -1,43 +1,54 @@
-package solution.commands;
+package solution;
 
-import fileio.*;
+
+import fileio.ActionInputData;
+import fileio.Writer;
 import org.json.simple.JSONArray;
 
-import java.io.IOException;
-import java.util.List;
+import solution.commands.Favorite;
+import solution.commands.Rating;
+import solution.commands.View;
+import solution.query.actors.ActorsQuery;
 
-public class Actions {
+import java.io.IOException;
+
+public final class Actions {
 
     // make it Singleton
-    private static Commands commands = null;
+    private static Actions actions = null;
 
-    public static Commands getCommands() {
-        if (commands == null) {
-            commands = new Commands();
+    public static Actions getActions() {
+        if (actions == null) {
+            actions = new Actions();
         }
-        return commands;
+        return actions;
     }
 
-    public void doCommands(Input input, Writer fileWriter,
-                           JSONArray arrayResult) throws IOException {
-        List<ActionInputData> commands = input.getCommands();
-        for (ActionInputData command : commands) {
-            if (command.getActionType().equalsIgnoreCase("command")) {
-                if (command.getType().equalsIgnoreCase("favorite")) {
-                    Favorite.getFavorite().addFavorite(command, input,
+    public void doActions(ActionInputData action, ParseData data, final Writer fileWriter,
+                           final JSONArray arrayResult) throws IOException {
+
+        if (action.getActionType().equalsIgnoreCase("command")) {
+            if (action.getType().equalsIgnoreCase("favorite")) {
+                Favorite.getFavorite().addFavorite(action, data, fileWriter, arrayResult);
+                }
+
+                if (action.getType().equalsIgnoreCase("view")) {
+                    View.getView().watchTitle(action, data,
                             fileWriter, arrayResult);
                 }
 
-                if (command.getType().equalsIgnoreCase("view")) {
-                    View.getView().watchTitle(command, input,
-                            fileWriter, arrayResult);
-                }
-
-                if (command.getType().equalsIgnoreCase("rating")) {
-                    Rating.getRating().rateVideo(command, input,
+                if (action.getType().equalsIgnoreCase("rating")) {
+                    Rating.getRating().rateVideo(action, data,
                             fileWriter, arrayResult);
                 }
             }
-        }
+            if (action.getActionType().equalsIgnoreCase("query")) {
+                if (action.getObjectType().equalsIgnoreCase("actors")) {
+                    ActorsQuery.getActorsQuery().checkQuery(action, data,
+                            fileWriter, arrayResult);
+                }
+            }
+
+
     }
 }
