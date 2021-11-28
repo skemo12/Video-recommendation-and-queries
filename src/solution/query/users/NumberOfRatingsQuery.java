@@ -47,7 +47,7 @@ public class NumberOfRatingsQuery {
                     return -1;
                 } else if (o1.getNumberOfRatings() < o2.getNumberOfRatings()) {
                     return 1;
-                } else return o1.getUsername().compareToIgnoreCase(o2.getUsername());
+                } else return o2.getUsername().compareToIgnoreCase(o1.getUsername());
 
             });
         }

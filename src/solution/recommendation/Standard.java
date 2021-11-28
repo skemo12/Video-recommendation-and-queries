@@ -8,6 +8,7 @@ import solution.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 public class Standard {
 
@@ -33,13 +34,22 @@ public class Standard {
                 return serial.getTitle();
             }
         }
-        return command.getType() + "Recommendation cannot be applied!";
+        return null;
     }
     public void getRecomandation(final ActionInputData command, ParseData data,
                                 final Writer fileWriter,
                                 final JSONArray arrayResult) throws IOException {
 
         String video = searchVideo(command, data);
+
+        if (video == null) {
+            String commandType = command.getType();
+            commandType = commandType.substring(0,1).toUpperCase() + commandType.substring(1).toLowerCase();
+            String outputMessage =  commandType + "Recommendation cannot be applied!";
+            arrayResult.add(fileWriter.writeFile(command.getActionId(),
+                    "no field", outputMessage));
+            return;
+        }
         String outputMessage = "StandardRecommendation result: " + video;
         arrayResult.add(fileWriter.writeFile(command.getActionId(),
                 "no field", outputMessage));

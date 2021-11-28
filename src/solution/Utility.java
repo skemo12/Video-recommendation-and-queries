@@ -1,8 +1,10 @@
 package solution;
 
+import actor.ActorsAwards;
 import fileio.*;
 
 import java.util.List;
+import java.util.Map;
 
 public final class Utility {
 
@@ -54,6 +56,15 @@ public final class Utility {
             }
         }
         return null;
+    }
+
+    public Integer getTotalAwardsNumber(ActorInputData actor) {
+        Map<ActorsAwards, Integer> awards = actor.getAwards();
+        Integer total = 0;
+        for (Map.Entry<ActorsAwards, Integer> entry : awards.entrySet()) {
+            total += entry.getValue();
+        }
+        return total;
     }
 
     public void updateFavorite(ParseData data) {

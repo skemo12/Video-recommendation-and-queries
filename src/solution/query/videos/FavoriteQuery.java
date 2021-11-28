@@ -69,7 +69,7 @@ public class FavoriteQuery {
                     return -1;
                 } else if (favoriteCount.get(o1) < favoriteCount.get(o2)) {
                     return 1;
-                } else return o1.compareToIgnoreCase(o2);
+                } else return o2.compareToIgnoreCase(o1);
 
             });
         }

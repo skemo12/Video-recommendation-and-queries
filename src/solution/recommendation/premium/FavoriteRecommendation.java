@@ -63,6 +63,14 @@ public class FavoriteRecommendation {
             return;
         }
         String video = searchVideo(command, data);
+        if (video == null) {
+            String commandType = command.getType();
+            commandType = commandType.substring(0,1).toUpperCase() + commandType.substring(1).toLowerCase();
+            String outputMessage =  commandType + "Recommendation cannot be applied!";
+            arrayResult.add(fileWriter.writeFile(command.getActionId(),
+                    "no field", outputMessage));
+            return;
+        }
         String outputMessage = "FavoriteRecommendation result: " + video;
         arrayResult.add(fileWriter.writeFile(command.getActionId(),
                 "no field", outputMessage));

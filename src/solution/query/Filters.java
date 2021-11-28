@@ -5,6 +5,7 @@ import fileio.ActionInputData;
 import fileio.ActorInputData;
 import solution.Movie;
 import solution.Show;
+import utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,21 +99,36 @@ public class Filters {
 
         if (this.awards != null) {
             for (String award : this.awards) {
-                if (!awards.containsKey(award)) {
+                if (!awards.containsKey(Utils.stringToAwards(award))) {
                     return false;
                 }
             }
         }
         return true;
     }
-
+    public Integer getAwardNumberWithFilter(ActorInputData actor) {
+        Map<ActorsAwards, Integer> awards = actor.getAwards();
+        Integer total = 0;
+        if (this.awards != null) {
+            for (String award : this.awards) {
+                if (awards.containsKey(Utils.stringToAwards(award))) {
+                    total += awards.get(Utils.stringToAwards(award));
+                }
+            }
+        }
+        return total;
+    }
     public boolean checkShowFilters(Show show) {
-        if (!this.years.contains(show.getYear())) {
-            return false;
+        if (!this.years.isEmpty()) {
+            if (!this.years.contains(show.getYear())) {
+                return false;
+            }
         }
         for (String genre : this.genres) {
-            if (!show.getGenres().contains(genre)) {
-                return false;
+            if (genre != null) {
+                if (!show.getGenres().contains(genre)) {
+                    return false;
+                }
             }
         }
 
