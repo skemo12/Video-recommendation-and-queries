@@ -11,7 +11,8 @@ import solution.commands.View;
 import solution.query.actors.Actors;
 import solution.query.users.NumberOfRatingsQuery;
 import solution.query.videos.Videos;
-import solution.recommendation.*;
+import solution.recommendation.BestUnseen;
+import solution.recommendation.Standard;
 import solution.recommendation.premium.FavoriteRecommendation;
 import solution.recommendation.premium.Popular;
 import solution.recommendation.premium.Search;
@@ -20,9 +21,13 @@ import java.io.IOException;
 
 public final class Actions {
 
-    // make it Singleton
+    /**
+     * Make it Singleton
+     */
     private static Actions actions = null;
-
+    /**
+     * Singleton function
+     */
     public static Actions getActions() {
         if (actions == null) {
             actions = new Actions();
@@ -30,8 +35,12 @@ public final class Actions {
         return actions;
     }
 
-    public void doActions(ActionInputData action, ParseData data, final Writer fileWriter,
-                           final JSONArray arrayResult) throws IOException {
+    /**
+     * Does all actions parsing
+     */
+    public void doActions(final ActionInputData action, final Database data,
+                          final Writer fileWriter, final JSONArray arrayResult)
+            throws IOException {
 
         if (action.getActionType().equalsIgnoreCase("command")) {
             if (action.getType().equalsIgnoreCase("favorite")) {

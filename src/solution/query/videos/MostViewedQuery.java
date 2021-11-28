@@ -1,7 +1,6 @@
 package solution.query.videos;
 
 import fileio.ActionInputData;
-import fileio.UserInputData;
 import fileio.Writer;
 import org.json.simple.JSONArray;
 import solution.*;
@@ -21,7 +20,7 @@ public class MostViewedQuery {
     }
 
     private List<String> createOutputTitlesMovies(ActionInputData command,
-                                                  ParseData data) {
+                                                  Database data) {
 
         List<String> outputVideos = new ArrayList<>();
         Filters filters = new Filters(command);
@@ -71,15 +70,21 @@ public class MostViewedQuery {
                     return -1;
                 } else if (totalViews.get(o1) < totalViews.get(o2)) {
                     return 1;
-                } else return o1.compareToIgnoreCase(o2);
+                } else return o2.compareToIgnoreCase(o1);
 
             });
         }
-
-        return outputVideos;
+        List<String> outputTitles= new ArrayList<>();
+        for (String title : outputVideos) {
+            if (command.getNumber() <= outputTitles.size()) {
+                break;
+            }
+            outputTitles.add(title);
+        }
+        return outputTitles;
     }
 
-    public void mostViewedQuery(final ActionInputData command, ParseData data,
+    public void mostViewedQuery(final ActionInputData command, Database data,
                             final Writer fileWriter,
                             final JSONArray arrayResult) throws IOException {
 

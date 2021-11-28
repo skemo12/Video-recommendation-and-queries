@@ -4,15 +4,9 @@ package solution.query.videos;
 import fileio.ActionInputData;
 import fileio.Writer;
 import org.json.simple.JSONArray;
-import solution.Movie;
-import solution.ParseData;
-import solution.Show;
-import solution.query.actors.Average;
-import solution.query.actors.Awards;
-import solution.query.actors.FilterDescription;
+import solution.Database;
 
 import java.io.IOException;
-import java.util.List;
 
 public class Videos {
     /**
@@ -26,7 +20,7 @@ public class Videos {
         return videos;
     }
 
-    public void checkQuery(final ActionInputData command, ParseData data,
+    public void checkQuery(final ActionInputData command, Database data,
                            final Writer fileWriter,
                            final JSONArray arrayResult) throws IOException {
 

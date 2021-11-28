@@ -5,12 +5,9 @@ import fileio.ActionInputData;
 import fileio.ActorInputData;
 import fileio.Writer;
 import org.json.simple.JSONArray;
-import solution.Movie;
-import solution.ParseData;
-import solution.Serial;
+import solution.Database;
 import solution.Utility;
 import solution.query.Filters;
-import utils.Utils;
 
 import java.io.IOException;
 import java.util.*;
@@ -26,7 +23,7 @@ public class Awards {
     }
 
     private List<String> createOutputActors(ActionInputData command,
-                                            ParseData data) {
+                                            Database data) {
 
         List<String> outputActors = new ArrayList<>();
         Map<String, Integer> totalAwards = new HashMap<>();
@@ -67,7 +64,7 @@ public class Awards {
         return outputActors;
     }
 
-    public void awardsQuery(final ActionInputData command, ParseData data,
+    public void awardsQuery(final ActionInputData command, Database data,
                              final Writer fileWriter,
                              final JSONArray arrayResult) throws IOException {
 

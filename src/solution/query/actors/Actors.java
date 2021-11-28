@@ -2,7 +2,7 @@ package solution.query.actors;
 
 import fileio.*;
 import org.json.simple.JSONArray;
-import solution.ParseData;
+import solution.Database;
 
 import java.io.IOException;
 
@@ -20,7 +20,7 @@ public class Actors {
     }
 
 
-    public void checkQuery(final ActionInputData command, ParseData data,
+    public void checkQuery(final ActionInputData command, Database data,
                            final Writer fileWriter,
                            final JSONArray arrayResult) throws IOException {
 

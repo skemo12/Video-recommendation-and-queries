@@ -30,7 +30,7 @@ public final class Rating {
     /**
      * Rates a video with data from command.
      */
-    public void rateVideo(final ActionInputData command, ParseData data,
+    public void rateVideo(final ActionInputData command, Database data,
                            final Writer fileWriter, final JSONArray arrayResult)
             throws IOException {
         String username = command.getUsername();
@@ -126,7 +126,7 @@ public final class Rating {
         }
     }
 
-    public double getRatingByTitle(String title, ParseData data) {
+    public double getRatingByTitle(String title, Database data) {
         for (Movie movie : data.getMovies()){
             if (movie.getTitle().equalsIgnoreCase(title)) {
                 return movie.getRating();

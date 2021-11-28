@@ -7,9 +7,7 @@ import solution.Movie;
 import solution.Show;
 import utils.Utils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Filters {
     private List<Integer> years;
@@ -91,7 +89,12 @@ public class Filters {
 
         if (this.words != null) {
             for (String word : this.words) {
-                if (!description.contains(word)) {
+                List<String> descriptionRegex = Arrays.asList(description
+                        .replaceAll("[^a-zA-Z ]", " ")
+                        .toLowerCase()
+                        .split("\\s+"));
+                String wordLowerCase = word.toLowerCase(Locale.ROOT);
+                if (!descriptionRegex.contains(wordLowerCase)) {
                     return false;
                 }
             }

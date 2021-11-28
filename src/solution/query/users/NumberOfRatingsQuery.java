@@ -4,8 +4,6 @@ import fileio.ActionInputData;
 import fileio.Writer;
 import org.json.simple.JSONArray;
 import solution.*;
-import solution.query.Filters;
-import solution.query.videos.LongestQuery;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,14 +21,13 @@ public class NumberOfRatingsQuery {
     }
 
     private List<String> createOutputTitlesMovies(ActionInputData command,
-                                                  ParseData data) {
+                                                  Database data) {
         List<User> outputUsers = new ArrayList<>();
         for (User user : data.getUsers()) {
             if (user.getNumberOfRatings() > 0) {
                 outputUsers.add(user);
             }
         }
-
 
         if (command.getSortType().equalsIgnoreCase("asc")) {
             Collections.sort(outputUsers, (o1, o2) -> {
@@ -53,16 +50,15 @@ public class NumberOfRatingsQuery {
         }
         List<String> outputUsernames= new ArrayList<>();
         for (User user : outputUsers) {
-            if (command.getNumber() <= outputUsers.size()) {
+            if (command.getNumber() <= outputUsernames.size()) {
                 break;
-
             }
             outputUsernames.add(user.getUsername());
         }
         return outputUsernames;
     }
 
-    public void numberOfRatingsQuery(final ActionInputData command, ParseData data,
+    public void numberOfRatingsQuery(final ActionInputData command, Database data,
                             final Writer fileWriter,
                             final JSONArray arrayResult) throws IOException {
 

@@ -19,29 +19,28 @@ public class FavoriteRecommendation {
         return favoriteRecommendation;
     }
 
-    public String searchVideo(ActionInputData command, ParseData data) {
+    public String searchVideo(ActionInputData command, Database data) {
 
         Utility.getUtility().updateFavorite(data);
         List<Show> videos = new ArrayList<>();
         User user = Utility.getUtility().getUserByName(data.getUsers(), command.getUsername());
         for (Movie movie : data.getMovies()) {
-            if (movie.getRating() != 0.0) {
+            if (movie.getFavoriteAddCount() != 0.0) {
                 videos.add(movie);
             }
         }
         for (Serial serial : data.getSerials()) {
-            if (serial.getRating() != 0.0) {
+            if (serial.getFavoriteAddCount() != 0.0) {
                 videos.add(serial);
             }
         }
 
-
         Collections.sort(videos, (o1, o2) -> {
-            if (Double.compare(o1.getRating(), o2.getRating()) > 0) {
-                return 1;
-            } else if (Double.compare(o1.getRating(), o2.getRating()) < 0) {
+            if (o1.getFavoriteAddCount() > o2.getFavoriteAddCount()) {
                 return -1;
-            } else return o1.getTitle().compareToIgnoreCase(o2.getTitle());
+            } else if (o1.getFavoriteAddCount() < o2.getFavoriteAddCount()) {
+                return 1;
+            } else return Utility.getUtility().getDatabaseOrder(o1, o2, data);
 
         });
 
@@ -52,7 +51,7 @@ public class FavoriteRecommendation {
         }
         return Standard.getInstance().searchVideo(command, data);
     }
-    public void getRecommendation(final ActionInputData command, ParseData data,
+    public void getRecommendation(final ActionInputData command, Database data,
                                   final Writer fileWriter,
                                   final JSONArray arrayResult) throws IOException {
 

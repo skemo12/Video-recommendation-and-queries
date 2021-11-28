@@ -1,16 +1,13 @@
 package solution.commands;
 
 import fileio.ActionInputData;
-import fileio.Input;
-import fileio.UserInputData;
 import fileio.Writer;
 import org.json.simple.JSONArray;
-import solution.ParseData;
+import solution.Database;
 import solution.User;
 import solution.Utility;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 public class View {
@@ -24,7 +21,7 @@ public class View {
         return view;
     }
 
-    public void watchTitle(ActionInputData command, ParseData data,
+    public void watchTitle(ActionInputData command, Database data,
                            Writer fileWriter, JSONArray arrayResult)
             throws IOException {
         String username = command.getUsername();

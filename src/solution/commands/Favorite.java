@@ -1,16 +1,13 @@
 package solution.commands;
 
 import fileio.ActionInputData;
-import fileio.Input;
-import fileio.UserInputData;
 import fileio.Writer;
 import org.json.simple.JSONArray;
-import solution.ParseData;
+import solution.Database;
 import solution.User;
 import solution.Utility;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 public final class Favorite {
@@ -24,7 +21,7 @@ public final class Favorite {
         return favorite;
     }
 
-    public void addFavorite(final ActionInputData command, ParseData data,
+    public void addFavorite(final ActionInputData command, Database data,
                             final Writer fileWriter,
                             final JSONArray arrayResult)
             throws IOException {

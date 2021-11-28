@@ -1,14 +1,11 @@
 package solution.recommendation;
 
 import fileio.ActionInputData;
-import fileio.UserInputData;
 import fileio.Writer;
 import org.json.simple.JSONArray;
 import solution.*;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
 
 public class Standard {
 
@@ -20,7 +17,7 @@ public class Standard {
         return standard;
     }
 
-    public String searchVideo (ActionInputData command, ParseData data) {
+    public String searchVideo (ActionInputData command, Database data) {
         String username = command.getUsername();
         User user = Utility.getUtility().getUserByName(data.getUsers(), username);
         for (Movie movie : data.getMovies()) {
@@ -36,7 +33,7 @@ public class Standard {
         }
         return null;
     }
-    public void getRecomandation(final ActionInputData command, ParseData data,
+    public void getRecomandation(final ActionInputData command, Database data,
                                 final Writer fileWriter,
                                 final JSONArray arrayResult) throws IOException {
 

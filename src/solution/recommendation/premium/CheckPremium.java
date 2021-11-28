@@ -1,7 +1,7 @@
 package solution.recommendation.premium;
 
 import fileio.ActionInputData;
-import solution.ParseData;
+import solution.Database;
 import solution.Utility;
 
 public class CheckPremium {
@@ -13,7 +13,7 @@ public class CheckPremium {
         return checkPremium;
     }
 
-    public boolean checkPremium (ActionInputData command, ParseData data) {
+    public boolean checkPremium (ActionInputData command, Database data) {
         if (!Utility.getUtility().getUserByName(data.getUsers(), command.getUsername()).
                 getSubscriptionType().equalsIgnoreCase("PREMIUM")) {
             return false;

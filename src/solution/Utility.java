@@ -67,7 +67,7 @@ public final class Utility {
         return total;
     }
 
-    public void updateFavorite(ParseData data) {
+    public void updateFavorite(Database data) {
         for (User user : data.getUsers()) {
             for (String favorite : user.getFavoriteMovies()) {
                 Movie movie = getMovieByTitle(data.getMovies(), favorite);
@@ -80,6 +80,24 @@ public final class Utility {
                 }
             }
 
+        }
+    }
+    /**
+     * Comparator for Database
+     */
+    public int getDatabaseOrder(final Show o1, final Show o2, final Database data) {
+        if (data.getMovies().contains(o1)) {
+            if (data.getMovies().contains(o2)) {
+                return data.getMovies().indexOf(o1) - data.getMovies().indexOf(o2);
+            } else {
+                return data.getMovies().indexOf(o1) - data.getSerials().indexOf(o2);
+            }
+        } else {
+            if (data.getMovies().contains(o2)) {
+                return data.getSerials().indexOf(o1) - data.getMovies().indexOf(o2);
+            } else {
+                return data.getSerials().indexOf(o1) - data.getSerials().indexOf(o2);
+            }
         }
     }
 }

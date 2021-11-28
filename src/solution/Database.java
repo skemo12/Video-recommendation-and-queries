@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ParseData {
+public class Database {
 
     public List<Movie> getMovies() {
         return movies;
@@ -56,7 +56,7 @@ public class ParseData {
         this.actions = actions;
     }
 
-    public ParseData(final Input input) {
+    public Database(final Input input) {
 
         List<Movie> movies = new ArrayList<>();
         for (MovieInputData movie : input.getMovies()) {

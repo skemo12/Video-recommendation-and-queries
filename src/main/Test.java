@@ -29,7 +29,7 @@ public final class Test {
             Arrays.sort(inputDir);
 
             Scanner scanner = new Scanner(System.in);
-            String fileName = "large_test_no_2.json";
+            String fileName = "large_test_no_9.json";
 
             for (File file : inputDir) {
                 if (file.getName().equalsIgnoreCase(fileName)) {

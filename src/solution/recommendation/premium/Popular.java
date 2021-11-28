@@ -17,7 +17,7 @@ public class Popular {
         }
         return popular;
     }
-    public String searchVideo(ActionInputData command, ParseData data) {
+    public String searchVideo(ActionInputData command, Database data) {
 
         for (User user : data.getUsers()) {
             for (Map.Entry<String, Integer> entry : user.getHistory().entrySet()) {
@@ -58,22 +58,27 @@ public class Popular {
             if (max == null) {
                 break;
             }
+
             for (Movie movie : data.getMovies()){
-                if (movie.getGenres().contains(max.getValue()) && !user.getHistory().containsKey(movie.getTitle())) {
+                if (movie.getGenres().contains(max.getKey()) && !user.getHistory().containsKey(movie.getTitle())) {
                     return movie.getTitle();
                 }
             }
+
             for (Serial serial : data.getSerials()){
                 if (serial.getGenres().contains(max.getKey()) && !user.getHistory().containsKey(serial.getTitle())) {
                     return serial.getTitle();
                 }
             }
+
+
+
             popularity.remove(max.getKey());
         }
         return Standard.getInstance().searchVideo(command, data);
     }
 
-    public void getRecommendation(final ActionInputData command, ParseData data,
+    public void getRecommendation(final ActionInputData command, Database data,
                                   final Writer fileWriter,
                                   final JSONArray arrayResult) throws IOException {
         if (!CheckPremium.getInstance().checkPremium(command, data)) {
@@ -84,6 +89,9 @@ public class Popular {
         }
         String video = searchVideo(command, data);
         String outputMessage = "PopularRecommendation result: " + video;
+        if (video == null) {
+            outputMessage = "PopularRecommendation cannot be applied!";
+        }
         arrayResult.add(fileWriter.writeFile(command.getActionId(),
                 "no field", outputMessage));
 

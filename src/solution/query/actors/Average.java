@@ -4,7 +4,7 @@ import fileio.ActionInputData;
 import fileio.ActorInputData;
 import fileio.Writer;
 import org.json.simple.JSONArray;
-import solution.ParseData;
+import solution.Database;
 import solution.commands.Rating;
 
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class Average {
     }
 
     public List<String> createBestActorsList(final ActionInputData command,
-                                             ParseData data) {
+                                             Database data) {
 
         List<String> bestActors = new ArrayList<>();
         int number = command.getNumber();
@@ -85,7 +85,7 @@ public class Average {
 
 
 
-    public void averageQuery(final ActionInputData command, ParseData data,
+    public void averageQuery(final ActionInputData command, Database data,
                              final Writer fileWriter,
                              final JSONArray arrayResult) throws IOException {
 

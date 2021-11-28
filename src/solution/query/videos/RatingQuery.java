@@ -1,12 +1,10 @@
 package solution.query.videos;
 
-import actor.ActorsAwards;
 import fileio.ActionInputData;
-import fileio.ActorInputData;
 import fileio.Writer;
 import org.json.simple.JSONArray;
+import solution.Database;
 import solution.Movie;
-import solution.ParseData;
 import solution.Serial;
 import solution.Show;
 import solution.query.Filters;
@@ -25,7 +23,7 @@ public class RatingQuery {
     }
 
     private List<String> createOutputTitlesMovies(ActionInputData command,
-                                            ParseData data) {
+                                            Database data) {
         List<Show> outputVideos = new ArrayList<>();
         Filters filters = new Filters(command);
         if (command.getObjectType().equalsIgnoreCase("movies")){
@@ -74,7 +72,7 @@ public class RatingQuery {
         return outputTitles;
     }
 
-    public void ratingQuery(final ActionInputData command, ParseData data,
+    public void ratingQuery(final ActionInputData command, Database data,
                             final Writer fileWriter,
                             final JSONArray arrayResult) throws IOException {
 

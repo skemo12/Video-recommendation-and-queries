@@ -7,8 +7,6 @@ import fileio.Input;
 import fileio.InputLoader;
 import fileio.Writer;
 import org.json.simple.JSONArray;
-import solution.Actions;
-import solution.ParseData;
 import solution.Solution;
 
 import java.io.File;

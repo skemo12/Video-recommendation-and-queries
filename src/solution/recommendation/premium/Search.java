@@ -20,7 +20,7 @@ public class Search {
         return search;
     }
 
-    public List<String> searchVideo(ActionInputData command, ParseData data) {
+    public List<String> searchVideo(ActionInputData command, Database data) {
 
         List<Show> videos = new ArrayList<>();
         String genre = command.getGenre();
@@ -52,7 +52,7 @@ public class Search {
         return titles;
     }
 
-    public void getRecommendation(final ActionInputData command, ParseData data,
+    public void getRecommendation(final ActionInputData command, Database data,
                                   final Writer fileWriter,
                                   final JSONArray arrayResult) throws IOException {
 

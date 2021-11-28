@@ -1,7 +1,6 @@
 package solution.query.videos;
 
 import fileio.ActionInputData;
-import fileio.UserInputData;
 import fileio.Writer;
 import org.json.simple.JSONArray;
 import solution.*;
@@ -21,7 +20,7 @@ public class FavoriteQuery {
     }
 
     private List<String> createOutputTitlesMovies(ActionInputData command,
-                                                  ParseData data) {
+                                                  Database data) {
         List<String> outputVideos = new ArrayList<>();
         Filters filters = new Filters(command);
         Map<String, Integer> favoriteCount = new HashMap<>();
@@ -77,7 +76,7 @@ public class FavoriteQuery {
         return outputVideos;
     }
 
-    public void favoriteQuery(final ActionInputData command, ParseData data,
+    public void favoriteQuery(final ActionInputData command, Database data,
                             final Writer fileWriter,
                             final JSONArray arrayResult) throws IOException {
 
