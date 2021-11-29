@@ -1,65 +1,47 @@
 package solution.recommendation.premium;
 
 import fileio.ActionInputData;
-import fileio.Writer;
-import org.json.simple.JSONArray;
 import solution.data.Database;
 import solution.data.Movie;
 import solution.data.Serial;
 import solution.data.User;
 import solution.recommendation.RecommendationString;
 import solution.utility.Utility;
-import solution.recommendation.Standard;
+import solution.recommendation.standard.StandardRecommendation;
 
 import java.io.IOException;
 import java.util.Map;
 import java.util.HashMap;
 
-
-public final class Popular implements RecommendationString {
+/**
+ * Class for popular recommendation, used to get popular recommendation
+ */
+public final class PopularRecommendation implements RecommendationString {
 
     /**
      * Make it Singleton
      */
-    private static Popular popular = null;
+    private static PopularRecommendation popular = null;
     /**
      * Singleton function
      */
-    public static Popular getInstance() {
+    public static PopularRecommendation getInstance() {
         if (popular == null) {
-            popular = new Popular();
+            popular = new PopularRecommendation();
         }
         return popular;
     }
+
     /**
      * Searches and returns String video result
      */
     public String searchVideo(final ActionInputData command,
                               final Database data) {
 
-        for (User user : data.getUsers()) {
-            for (Map.Entry<String, Integer> entry : user.getHistory().
-                    entrySet()) {
-                String title = entry.getKey();
-                Integer views = entry.getValue();
-                Movie movie = Utility.getUtility().getMovieByTitle(data.
-                        getMovies(), title);
-                if (movie != null) {
-                    movie.setNumberOfViews(movie.getNumberOfViews() + views);
-                }
-
-                Serial serial = Utility.getUtility().getSerialByTitle(data.
-                        getSerials(), title);
-                if (serial != null) {
-                    serial.setNumberOfViews(serial.getNumberOfViews() + views);
-                }
-
-            }
-        }
-        User user = Utility.getUtility().getUserByUsername(data.getUsers(),
+        Utility.getInstance().updateViewNumber(data);
+        User user = Utility.getInstance().getUserByUsername(data.getUsers(),
                 command.getUsername());
         Map<String, Integer> popularity = new HashMap<>();
-
 
         for (Movie movie : data.getMovies()) {
             for (String genre : movie.getGenres()) {
@@ -71,6 +53,7 @@ public final class Popular implements RecommendationString {
                 }
             }
         }
+
         while (popularity != null) {
             Map.Entry<String, Integer> max = null;
             for (Map.Entry<String, Integer> entry : popularity.entrySet()) {
@@ -79,6 +62,7 @@ public final class Popular implements RecommendationString {
                     max = entry;
                 }
             }
+
             if (max == null) {
                 break;
             }
@@ -97,32 +81,34 @@ public final class Popular implements RecommendationString {
                 }
             }
 
-
-
             popularity.remove(max.getKey());
         }
-        return Standard.getInstance().searchVideo(command, data);
+
+        return StandardRecommendation.getInstance().searchVideo(command, data);
     }
+
     /**
      * Creates output message and calls method for recommendation
      */
-    public void getRecommendation(final ActionInputData command,
-                                  final Database data, final Writer fileWriter,
-                                  final JSONArray arrayResult)
-            throws IOException {
-        if (!CheckPremium.getInstance().checkPremium(command, data)) {
+    public void getRecommendation(final ActionInputData action,
+                                  final Database data) throws IOException {
+
+        if (!CheckPremium.getInstance().checkPremium(action, data)) {
             String outputMessage = "PopularRecommendation cannot be applied!";
-            arrayResult.add(fileWriter.writeFile(command.getActionId(),
-                    "no field", outputMessage));
+            Utility.getInstance().writeOutputMessage(data, action,
+                    outputMessage);
             return;
         }
-        String video = searchVideo(command, data);
+
+        String video = searchVideo(action, data);
         String outputMessage = "PopularRecommendation result: " + video;
+
         if (video == null) {
             outputMessage = "PopularRecommendation cannot be applied!";
         }
-        arrayResult.add(fileWriter.writeFile(command.getActionId(),
-                "no field", outputMessage));
+
+        Utility.getInstance().writeOutputMessage(data, action,
+                outputMessage);
 
     }
 }

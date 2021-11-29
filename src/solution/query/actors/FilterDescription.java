@@ -1,18 +1,20 @@
 package solution.query.actors;
 
 import fileio.ActionInputData;
-import fileio.ActorInputData;
-import fileio.Writer;
-import org.json.simple.JSONArray;
+import solution.data.Actor;
 import solution.data.Database;
 import solution.query.Filters;
 import solution.query.QueryInterface;
+import solution.utility.Utility;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * Class for description actor query, used to get description actor query
+ */
 public final class FilterDescription implements QueryInterface {
 
     /**
@@ -28,42 +30,41 @@ public final class FilterDescription implements QueryInterface {
         }
         return filterDescription;
     }
+
     /**
      * Method to create output String list
      */
     public List<String> createOutputList(final ActionInputData command,
                                           final Database data) {
 
-        List<String> outputActors = new ArrayList<>();
+        List<String> outputActorsNames = new ArrayList<>();
         Filters filters = new Filters(command);
-        for (ActorInputData actor : data.getActors()) {
+
+        for (Actor actor : data.getActors()) {
             if (filters.checkActorFilters(actor)) {
-                outputActors.add(actor.getName());
+                outputActorsNames.add(actor.getName());
             }
 
         }
-        if (command.getSortType().equalsIgnoreCase("asc")) {
-            Collections.sort(outputActors);
-        } else {
-            Collections.sort(outputActors, Collections.reverseOrder());
 
+        if (command.getSortType().equalsIgnoreCase("asc")) {
+            Collections.sort(outputActorsNames);
+        } else {
+            Collections.sort(outputActorsNames, Collections.reverseOrder());
         }
-        return outputActors;
+        return outputActorsNames;
     }
+
     /**
      * Creates output message and calls method for query
      */
-    public void getQuery(final ActionInputData command, final Database data,
-                         final Writer fileWriter,
-                         final JSONArray arrayResult) throws IOException {
+    public void getQuery(final ActionInputData action, final Database data)
+            throws IOException {
 
-        List<String> bestActors = createOutputList(command, data);
+        List<String> bestActors = createOutputList(action, data);
         String outputMessage = "Query result: " + bestActors;
-        arrayResult.add(fileWriter.writeFile(command.getActionId(),
-                "no field", outputMessage));
-
+        Utility.getInstance().writeOutputMessage(data, action,
+                outputMessage);
     }
-
-
 
 }

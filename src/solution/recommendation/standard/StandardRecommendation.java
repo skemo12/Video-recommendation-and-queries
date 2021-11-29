@@ -1,28 +1,30 @@
-package solution.recommendation;
+package solution.recommendation.standard;
 
 import fileio.ActionInputData;
-import fileio.Writer;
-import org.json.simple.JSONArray;
 import solution.data.Database;
 import solution.data.Movie;
 import solution.data.Serial;
 import solution.data.User;
+import solution.recommendation.RecommendationString;
 import solution.utility.Utility;
 
 import java.io.IOException;
 
-public final class Standard implements RecommendationString {
+/**
+ * Class for standard recommendation, used to get standard recommendation
+ */
+public final class StandardRecommendation implements RecommendationString {
 
     /**
      * Make it Singleton
      */
-    private static Standard standard = null;
+    private static StandardRecommendation standard = null;
     /**
      * Singleton function
      */
-    public static Standard getInstance() {
+    public static StandardRecommendation getInstance() {
         if (standard == null) {
-            standard = new Standard();
+            standard = new StandardRecommendation();
         }
         return standard;
     }
@@ -32,9 +34,11 @@ public final class Standard implements RecommendationString {
      */
     public String searchVideo(final ActionInputData command,
                                final Database data) {
+
         String username = command.getUsername();
-        User user = Utility.getUtility().getUserByUsername(data.getUsers(),
+        User user = Utility.getInstance().getUserByUsername(data.getUsers(),
                 username);
+
         for (Movie movie : data.getMovies()) {
             if (!user.getHistory().containsKey(movie.getTitle())) {
                 return movie.getTitle();
@@ -46,32 +50,33 @@ public final class Standard implements RecommendationString {
                 return serial.getTitle();
             }
         }
+
         return null;
     }
 
     /**
      * Creates output message and calls method for recommendation
      */
-    public void getRecommendation(final ActionInputData command,
-                                  final Database data, final Writer fileWriter,
-                                  final JSONArray arrayResult)
-            throws IOException {
+    public void getRecommendation(final ActionInputData action,
+                                  final Database data) throws IOException {
 
-        String video = searchVideo(command, data);
+        String video = searchVideo(action, data);
 
         if (video == null) {
-            String commandType = command.getType();
+            String commandType = action.getType();
             commandType = commandType.substring(0, 1).toUpperCase()
                     + commandType.substring(1).toLowerCase();
+
             String outputMessage =  commandType
                     + "Recommendation cannot be applied!";
-            arrayResult.add(fileWriter.writeFile(command.getActionId(),
-                    "no field", outputMessage));
+            Utility.getInstance().writeOutputMessage(data, action,
+                    outputMessage);
             return;
         }
+
         String outputMessage = "StandardRecommendation result: " + video;
-        arrayResult.add(fileWriter.writeFile(command.getActionId(),
-                "no field", outputMessage));
+        Utility.getInstance().writeOutputMessage(data, action,
+                outputMessage);
 
     }
 }

@@ -1,16 +1,20 @@
 package solution.utility;
 
-import actor.ActorsAwards;
-import fileio.ActorInputData;
+import fileio.ActionInputData;
+import solution.data.Database;
+import solution.data.Actor;
 import solution.data.Movie;
 import solution.data.Serial;
 import solution.data.User;
-import solution.data.Show;
-import solution.data.Database;
+import solution.data.Show;;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Utility class, contains useful methods used all around the solution
+ */
 public final class Utility {
 
     /**
@@ -20,7 +24,7 @@ public final class Utility {
     /**
      * Singleton function
      */
-    public static Utility getUtility() {
+    public static Utility getInstance() {
         if (utility == null) {
             utility = new Utility();
         }
@@ -65,36 +69,115 @@ public final class Utility {
         }
         return null;
     }
-    /**
-     * Gets total awards an actor has
-     */
-    public Integer getTotalAwardsNumber(final ActorInputData actor) {
-        Map<ActorsAwards, Integer> awards = actor.getAwards();
-        Integer total = 0;
-        for (Map.Entry<ActorsAwards, Integer> entry : awards.entrySet()) {
-            total += entry.getValue();
-        }
-        return total;
-    }
 
+    /**
+     * Returns rating for String title
+     */
+    public double getRatingByTitle(final String title, final Database data) {
+        for (Movie movie : data.getMovies()) {
+            if (movie.getTitle().equalsIgnoreCase(title)) {
+                return movie.getRating();
+            }
+        }
+        for (Serial serial : data.getSerials()) {
+            if (serial.getTitle().equalsIgnoreCase(title)) {
+                return serial.getRating();
+            }
+        }
+        return 0.0;
+    }
     /**
      * Updates FavoriteAddCount for both movies and serials
      */
-    public void updateFavorite(final Database data) {
+    public void updateFavoriteCount(final Database data) {
         for (User user : data.getUsers()) {
             for (String favorite : user.getFavoriteMovies()) {
                 Movie movie = getMovieByTitle(data.getMovies(), favorite);
                 if (movie != null) {
-                    movie.setFavoriteAddCount(movie.getFavoriteAddCount() + 1);
+                    movie.setFavoriteCount(movie.getFavoriteCount() + 1);
                 }
                 Serial serial = getSerialByTitle(data.getSerials(), favorite);
                 if (serial != null) {
-                    serial.setFavoriteAddCount(serial.getFavoriteAddCount()
+                    serial.setFavoriteCount(serial.getFavoriteCount()
                             + 1);
                 }
             }
 
         }
+    }
+    /**
+     * Updates numberOfViews for both movies and serials
+     */
+    public void updateViewNumber(final Database data) {
+        for (User user : data.getUsers()) {
+            for (Map.Entry<String, Integer> video : user.getHistory().
+                    entrySet()) {
+                Movie movie = getMovieByTitle(data.getMovies(), video.getKey());
+                if (movie != null) {
+                    movie.setNumberOfViews(movie.getNumberOfViews()
+                            + video.getValue());
+                }
+                Serial serial = getSerialByTitle(data.getSerials(),
+                        video.getKey());
+                if (serial != null) {
+                    serial.setNumberOfViews(serial.getNumberOfViews()
+                            + video.getValue());
+                }
+            }
+
+        }
+    }
+    /**
+     * Updates grade for all actors
+     */
+    public void updateGradeActor(final Database data) {
+        for (Actor actor : data.getActors()) {
+            List<String> videoList = actor.getFilmography();
+            double grade = 0.0;
+            int count = 0;
+            for (String title : videoList) {
+                if (getRatingByTitle(title, data) != 0) {
+                    grade += getRatingByTitle(title, data);
+                    count++;
+                }
+
+            }
+            if (grade != 0.0 && count != 0) {
+                grade = grade / count;
+                actor.setGrade(grade);
+            }
+        }
+    }
+    /**
+     * Updates total numbers of awards
+     */
+    public void updateAwardsNumberActor(final Database data) {
+        for (Actor actor : data.getActors()) {
+            List<String> videoList = actor.getFilmography();
+            double grade = 0.0;
+            int count = 0;
+            for (String title : videoList) {
+                if (getRatingByTitle(title, data) != 0) {
+                    grade += getRatingByTitle(title, data);
+                    count++;
+                }
+
+            }
+            if (grade != 0.0 && count != 0) {
+                grade = grade / count;
+                actor.setGrade(grade);
+            }
+        }
+    }
+    /**
+     * Writes message to data output using data file writer
+     */
+    public void writeOutputMessage(final Database data,
+                                   final ActionInputData action,
+                                   final String message) throws IOException {
+        data.getArrayResult().add(data.getFileWriter()
+                .writeFile(action.getActionId(), "no field",
+                        message));
     }
     /**
      * Comparator for Database

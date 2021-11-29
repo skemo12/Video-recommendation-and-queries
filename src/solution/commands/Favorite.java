@@ -1,8 +1,6 @@
 package solution.commands;
 
 import fileio.ActionInputData;
-import fileio.Writer;
-import org.json.simple.JSONArray;
 import solution.data.Database;
 import solution.data.User;
 import solution.utility.Utility;
@@ -10,7 +8,10 @@ import solution.utility.Utility;
 import java.io.IOException;
 import java.util.Map;
 
-public final class Favorite {
+/**
+ * Class for favorite command
+ */
+public final class Favorite implements CommandInterface {
 
     /**
      * Make it Singleton
@@ -25,17 +26,17 @@ public final class Favorite {
         }
         return favorite;
     }
+
     /**
-     * Add movie to favorite and creates output message
+     * Adds movie to favorite and creates output message
+     * does not update favoriteAddCount for movie or serial
      */
-    public void addFavorite(final ActionInputData command, final Database data,
-                            final Writer fileWriter,
-                            final JSONArray arrayResult)
+    public void doCommand(final ActionInputData action, final Database data)
             throws IOException {
 
-        String username = command.getUsername();
-        String title = command.getTitle();
-        User user = Utility.getUtility().getUserByUsername(data.getUsers(),
+        String username = action.getUsername();
+        String title = action.getTitle();
+        User user = Utility.getInstance().getUserByUsername(data.getUsers(),
                 username);
         Map<String, Integer> history = user.getHistory();
 
@@ -44,20 +45,20 @@ public final class Favorite {
                 user.getFavoriteMovies().add(title);
                 String outputMessage = "success -> " + title
                             + " was added as favourite";
-                arrayResult.add(fileWriter.writeFile(command.getActionId(),
-                        "no field", outputMessage));
+                Utility.getInstance().writeOutputMessage(data, action,
+                        outputMessage);
                 } else {
                     String outputMessage = "error -> " + title
                             + " is already in favourite list";
-                    arrayResult.add(fileWriter.writeFile(command.getActionId(),
-                            "no field", outputMessage));
+                Utility.getInstance().writeOutputMessage(data, action,
+                        outputMessage);
 
                 }
             } else {
                 String outputMessage = "error -> " + title
                         + " is not seen";
-                arrayResult.add(fileWriter.writeFile(command.getActionId(),
-                        "no field", outputMessage));
+            Utility.getInstance().writeOutputMessage(data, action,
+                    outputMessage);
             }
 
 

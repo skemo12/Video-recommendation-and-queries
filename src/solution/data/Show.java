@@ -4,20 +4,36 @@ import fileio.ShowInput;
 
 import java.util.ArrayList;
 
+/**
+ * Custom show class with extra features
+ * Extends class ShowInput from fileio
+ */
 public class Show extends ShowInput {
 
+    /**
+     * Show's overall rating
+     */
     private double rating;
+    /**
+     * Show's overall duration
+     */
     private int duration;
+    /**
+     * Show's overall number of views
+     */
     private int numberOfViews;
-    private int favoriteAddCount;
+    /**
+     * Show's number of users who added it to favorite list
+     */
+    private int favoriteCount;
 
 
-    public final int getFavoriteAddCount() {
-        return favoriteAddCount;
+    public final int getFavoriteCount() {
+        return favoriteCount;
     }
 
-    public final void setFavoriteAddCount(final int favoriteAddCount) {
-        this.favoriteAddCount = favoriteAddCount;
+    public final void setFavoriteCount(final int favoriteCount) {
+        this.favoriteCount = favoriteCount;
     }
 
 
@@ -45,7 +61,6 @@ public class Show extends ShowInput {
         this.rating = rating;
     }
 
-
     public Show(final String title, final int year,
                 final ArrayList<String> cast, final ArrayList<String> genres,
                 final double rating, final int duration) {
@@ -53,6 +68,6 @@ public class Show extends ShowInput {
         this.rating = rating;
         this.duration = duration;
         this.numberOfViews = 0;
-        this.favoriteAddCount = 0;
+        this.favoriteCount = 0;
     }
 }

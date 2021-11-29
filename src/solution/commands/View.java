@@ -1,8 +1,6 @@
 package solution.commands;
 
 import fileio.ActionInputData;
-import fileio.Writer;
-import org.json.simple.JSONArray;
 import solution.data.Database;
 import solution.data.User;
 import solution.utility.Utility;
@@ -10,7 +8,10 @@ import solution.utility.Utility;
 import java.io.IOException;
 import java.util.Map;
 
-public class View {
+/**
+ * Class for view command
+ */
+public class View implements CommandInterface {
 
     /**
      * Make it Singleton
@@ -19,21 +20,23 @@ public class View {
     /**
      * Singleton function
      */
-    public static View getView() {
+    public static View getInstance() {
         if (view == null) {
             view = new View();
         }
         return view;
     }
+
     /**
-     * Add title to watchlist of user from command
+     * Add title to watchlist of user from action
+     * does not update the numberOfViews for movie or serials
      */
-    public void watchTitle(final ActionInputData command, final Database data,
-                           final Writer fileWriter, final JSONArray arrayResult)
+    public void doCommand(final ActionInputData action, final Database data)
             throws IOException {
-        String username = command.getUsername();
-        String title = command.getTitle();
-        User user = Utility.getUtility().getUserByUsername(data.getUsers(),
+
+        String username = action.getUsername();
+        String title = action.getTitle();
+        User user = Utility.getInstance().getUserByUsername(data.getUsers(),
                 username);
         Map<String, Integer> history = user.getHistory();
 
@@ -41,14 +44,16 @@ public class View {
             history.put(title, history.get(title) + 1);
             String outputMessage = "success -> " + title
                     + " was viewed with total views of " + history.get(title);
-            arrayResult.add(fileWriter.writeFile(command.getActionId(),
-                    "no field", outputMessage));
+            data.getArrayResult().add(data.getFileWriter()
+                    .writeFile(action.getActionId(), "no field",
+                            outputMessage));
         } else {
             history.put(title, 1);
             String outputMessage = "success -> " + title
                     + " was viewed with total views of " + history.get(title);
-            arrayResult.add(fileWriter.writeFile(command.getActionId(),
-                    "no field", outputMessage));
+            data.getArrayResult().add(data.getFileWriter()
+                    .writeFile(action.getActionId(), "no field",
+                            outputMessage));
         }
 
     }

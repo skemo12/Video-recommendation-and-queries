@@ -1,17 +1,19 @@
 package solution.query.users;
 
 import fileio.ActionInputData;
-import fileio.Writer;
-import org.json.simple.JSONArray;
 import solution.data.Database;
 import solution.data.User;
 import solution.query.QueryInterface;
+import solution.utility.Utility;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Class for user query, used to get number of ratings query
+ */
 public final class NumberOfRatingsQuery implements QueryInterface {
 
     /**
@@ -27,6 +29,41 @@ public final class NumberOfRatingsQuery implements QueryInterface {
         }
         return numberOfRatingsQuery;
     }
+
+    /**
+     * Sorts list of users by number of ratings given according to type
+     */
+    private List<User> sortUsersByRatings(final List<User> users,
+                                          final String type) {
+
+        if (type.equalsIgnoreCase("asc")) {
+            Collections.sort(users, (o1, o2) -> {
+                if (o1.getNumberOfRatings() > o2.getNumberOfRatings()) {
+                    return 1;
+                } else if (o1.getNumberOfRatings() < o2.getNumberOfRatings()) {
+                    return -1;
+                } else {
+                    return o1.getUsername().
+                            compareToIgnoreCase(o2.getUsername());
+                }
+
+            });
+        } else {
+            Collections.sort(users, (o1, o2) -> {
+                if (o1.getNumberOfRatings() > o2.getNumberOfRatings()) {
+                    return -1;
+                } else if (o1.getNumberOfRatings() < o2.getNumberOfRatings()) {
+                    return 1;
+                } else {
+                    return o2.getUsername().
+                            compareToIgnoreCase(o1.getUsername());
+                }
+
+            });
+        }
+        return users;
+    }
+
     /**
      * Method to create output String list
      */
@@ -39,31 +76,7 @@ public final class NumberOfRatingsQuery implements QueryInterface {
             }
         }
 
-        if (command.getSortType().equalsIgnoreCase("asc")) {
-            Collections.sort(outputUsers, (o1, o2) -> {
-                if (o1.getNumberOfRatings() > o2.getNumberOfRatings()) {
-                    return 1;
-                } else if (o1.getNumberOfRatings() < o2.getNumberOfRatings()) {
-                    return -1;
-                } else {
-                    return o1.getUsername().
-                            compareToIgnoreCase(o2.getUsername());
-                }
-
-            });
-        } else {
-            Collections.sort(outputUsers, (o1, o2) -> {
-                if (o1.getNumberOfRatings() > o2.getNumberOfRatings()) {
-                    return -1;
-                } else if (o1.getNumberOfRatings() < o2.getNumberOfRatings()) {
-                    return 1;
-                } else {
-                    return o2.getUsername().
-                            compareToIgnoreCase(o1.getUsername());
-                }
-
-            });
-        }
+        outputUsers = sortUsersByRatings(outputUsers, command.getSortType());
         List<String> outputUsernames = new ArrayList<>();
         for (User user : outputUsers) {
             if (command.getNumber() <= outputUsernames.size()) {
@@ -77,15 +90,13 @@ public final class NumberOfRatingsQuery implements QueryInterface {
     /**
      * Creates output message and calls method for query
      */
-    public void getQuery(final ActionInputData command,
-                         final Database data,
-                         final Writer fileWriter,
-                         final JSONArray arrayResult) throws IOException {
+    public void getQuery(final ActionInputData action, final Database data)
+            throws IOException {
 
-        List<String> bestVideos = createOutputList(command, data);
+        List<String> bestVideos = createOutputList(action, data);
         String outputMessage = "Query result: " + bestVideos;
-        arrayResult.add(fileWriter.writeFile(command.getActionId(),
-                "no field", outputMessage));
+        Utility.getInstance().writeOutputMessage(data, action,
+                outputMessage);
 
     }
 

@@ -2,8 +2,6 @@ package solution.commands;
 
 
 import fileio.ActionInputData;
-import fileio.Writer;
-import org.json.simple.JSONArray;
 import solution.data.Database;
 import solution.data.User;
 import solution.data.Movie;
@@ -13,7 +11,10 @@ import solution.utility.Utility;
 import java.io.IOException;
 import java.util.Map;
 
-public final class Rating {
+/**
+ * Class for rating command
+ */
+public final class Rating implements CommandInterface {
 
     /**
      * Make it Singleton
@@ -23,27 +24,25 @@ public final class Rating {
     /**
      * Singleton function
      */
-    public static Rating getRating() {
+    public static Rating getInstance() {
         if (rating == null) {
             rating = new Rating();
         }
         return rating;
     }
 
-
     /**
-     * Rates a video with data from command.
+     * Rates a video with data from action.
      */
-    public void rateVideo(final ActionInputData command, final Database data,
-                           final Writer fileWriter, final JSONArray arrayResult)
+    public void doCommand(final ActionInputData action, final Database data)
             throws IOException {
-        String username = command.getUsername();
-        String title = command.getTitle();
-        User user = Utility.getUtility().getUserByUsername(data.getUsers(),
+        String username = action.getUsername();
+        String title = action.getTitle();
+        User user = Utility.getInstance().getUserByUsername(data.getUsers(),
                 username);
-        Movie movie = Utility.getUtility().getMovieByTitle(data.getMovies(),
+        Movie movie = Utility.getInstance().getMovieByTitle(data.getMovies(),
                 title);
-        Serial serial = Utility.getUtility().getSerialByTitle(data.getSerials(),
+        Serial serial = Utility.getInstance().getSerialByTitle(data.getSerials(),
                 title);
         Map<String, Integer> history = user.getHistory();
 
@@ -52,20 +51,20 @@ public final class Rating {
                 if (movie.getRatingUsers().contains(user)) {
                     String outputMessage = "error -> " + title
                             + " has been already rated";
-                    arrayResult.add(fileWriter.writeFile(command.getActionId(),
-                                "no field", outputMessage));
+                    Utility.getInstance().writeOutputMessage(data, action,
+                            outputMessage);
                     return;
-
                 }
-                movie.getRatingsList().add(command.getGrade());
+
+                movie.getRatingsList().add(action.getGrade());
                 movie.getRatingUsers().add(user);
                 Double outGrade = movie.getRatingsList().get(movie.
                         getRatingsList().size() - 1);
                 String outputMessage = "success -> " + title
                         + " was rated with " + outGrade + " by "
                         + username;
-                arrayResult.add(fileWriter.writeFile(command.getActionId(),
-                        "no field", outputMessage));
+                Utility.getInstance().writeOutputMessage(data, action,
+                        outputMessage);
                 Double grade = 0.0;
                 int count = 0;
                 for (Double value : movie.getRatingsList()) {
@@ -78,26 +77,26 @@ public final class Rating {
             } else {
                 String outputMessage = "error -> " + title
                         + " is not seen";
-                arrayResult.add(fileWriter.writeFile(command.getActionId(),
-                        "no field", outputMessage));
+                Utility.getInstance().writeOutputMessage(data, action,
+                        outputMessage);
 
             }
         }
 
         if (serial != null) {
-            int seasonNumber = command.getSeasonNumber() - 1;
+            int seasonNumber = action.getSeasonNumber() - 1;
             if (history.containsKey(title)) {
                 if (serial.getRatingUsers().get(seasonNumber).contains(user)) {
                     String outputMessage = "error -> " + title
                                 + " has been already rated";
-                    arrayResult.add(fileWriter.writeFile(command.getActionId(),
-                                "no field", outputMessage));
+                    Utility.getInstance().writeOutputMessage(data, action,
+                            outputMessage);
                     return;
 
                 }
 
                 serial.getRatingUsers().get(seasonNumber).add(user);
-                serial.getSeasons().get(seasonNumber).getRatings().add(command.
+                serial.getSeasons().get(seasonNumber).getRatings().add(action.
                         getGrade());
                 Double outGrade = serial.getSeasons().get(seasonNumber).
                         getRatings().get(serial.getSeasons().get(seasonNumber).
@@ -105,8 +104,8 @@ public final class Rating {
                 String outputMessage = "success -> " + title
                         + " was rated with " + outGrade + " by "
                         + username;
-                arrayResult.add(fileWriter.writeFile(command.getActionId(),
-                        "no field", outputMessage));
+                Utility.getInstance().writeOutputMessage(data, action,
+                        outputMessage);
 
                 Double grade = 0.0;
                 int count = 0;
@@ -127,28 +126,13 @@ public final class Rating {
             } else {
                 String outputMessage = "error -> " + title
                         + " is not seen";
-                arrayResult.add(fileWriter.writeFile(command.getActionId(),
-                        "no field", outputMessage));
+                Utility.getInstance().writeOutputMessage(data, action,
+                        outputMessage);
 
             }
         }
     }
-    /**
-     * Returns rating for String title
-     */
-    public double getRatingByTitle(final String title, final Database data) {
-        for (Movie movie : data.getMovies()) {
-            if (movie.getTitle().equalsIgnoreCase(title)) {
-                return movie.getRating();
-            }
-        }
-        for (Serial serial : data.getSerials()) {
-            if (serial.getTitle().equalsIgnoreCase(title)) {
-                return serial.getRating();
-            }
-        }
-        return 0.0;
-    }
+
 }
 
 

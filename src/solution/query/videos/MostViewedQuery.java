@@ -1,22 +1,23 @@
 package solution.query.videos;
 
 import fileio.ActionInputData;
-import fileio.Writer;
-import org.json.simple.JSONArray;
 import solution.data.Database;
 import solution.data.Movie;
 import solution.data.Serial;
+import solution.data.Show;
 import solution.query.Filters;
-import solution.data.User;
 import solution.query.QueryInterface;
+import solution.utility.Utility;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 
+
+/**
+ * Class for most viewed video query, used to get most viewed video query
+ */
 public final class MostViewedQuery implements QueryInterface {
 
     /**
@@ -32,89 +33,91 @@ public final class MostViewedQuery implements QueryInterface {
         }
         return mostViewedQuery;
     }
+
+    /**
+     * Sorts list of shows by number of favorite lists they have been added to
+     * according to type
+     */
+    private List<Show> sortShowsByMostViewed(final List<Show> videos,
+                                             final String type) {
+
+        if (type.equalsIgnoreCase("asc")) {
+            Collections.sort(videos, (o1, o2) -> {
+                if (o1.getNumberOfViews() > o2.getNumberOfViews()) {
+                    return 1;
+                } else if (o1.getNumberOfViews() < o2.getNumberOfViews()) {
+                    return -1;
+                } else {
+                    return o1.getTitle().compareToIgnoreCase(o2.getTitle());
+                }
+
+            });
+        } else {
+            Collections.sort(videos, (o1, o2) -> {
+                if (o1.getNumberOfViews() > o2.getNumberOfViews()) {
+                    return -1;
+                } else if (o1.getNumberOfViews() < o2.getNumberOfViews()) {
+                    return 1;
+                } else {
+                    return o2.getTitle().compareToIgnoreCase(o1.getTitle());
+                }
+
+            });
+        }
+        return videos;
+    }
+
     /**
      * Method to create output String list
      */
     public List<String> createOutputList(final ActionInputData command,
                                           final Database data) {
 
-        List<String> outputVideos = new ArrayList<>();
+        List<Show> mostViewedVideos = new ArrayList<>();
         Filters filters = new Filters(command);
-        Map<String, Integer> totalViews = new HashMap<>();
+        Utility.getInstance().updateViewNumber(data);
 
-        for (User user : data.getUsers()) {
-            for (Map.Entry<String, Integer> entry : user.getHistory().entrySet()) {
-                String title = entry.getKey();
-                Integer views = entry.getValue();
-                if (totalViews.containsKey(title)) {
-                    totalViews.put(title, totalViews.get(title) + views);
-                } else {
-                    totalViews.put(title, views);
-                }
-
-            }
-        }
         if (command.getObjectType().equalsIgnoreCase("movies")) {
             List<Movie> movies = data.getMovies();
             for (Movie movie : movies) {
-                if (filters.checkShowFilters(movie) && totalViews.
-                        containsKey(movie.getTitle())) {
-                    outputVideos.add(movie.getTitle());
+                if (filters.checkShowFilters(movie)
+                        && movie.getNumberOfViews() > 0) {
+                    mostViewedVideos.add(movie);
                 }
             }
         } else {
             List<Serial> serials = data.getSerials();
             for (Serial serial : serials) {
-                if (filters.checkShowFilters(serial) && totalViews.
-                        containsKey(serial.getTitle())) {
-                    outputVideos.add(serial.getTitle());
+                if (filters.checkShowFilters(serial)
+                        && serial.getNumberOfViews() > 0) {
+                    mostViewedVideos.add(serial);
                 }
             }
         }
 
-        if (command.getSortType().equalsIgnoreCase("asc")) {
-            Collections.sort(outputVideos, (o1, o2) -> {
-                if (totalViews.get(o1) > totalViews.get(o2)) {
-                    return 1;
-                } else if (totalViews.get(o1) < totalViews.get(o2)) {
-                    return -1;
-                } else {
-                    return o1.compareToIgnoreCase(o2);
-                }
-
-            });
-        } else {
-            Collections.sort(outputVideos, (o1, o2) -> {
-                if (totalViews.get(o1) > totalViews.get(o2)) {
-                    return -1;
-                } else if (totalViews.get(o1) < totalViews.get(o2)) {
-                    return 1;
-                } else {
-                    return o2.compareToIgnoreCase(o1);
-                }
-
-            });
-        }
+        mostViewedVideos = sortShowsByMostViewed(mostViewedVideos,
+                command.getSortType());
         List<String> outputTitles = new ArrayList<>();
-        for (String title : outputVideos) {
+        for (Show video : mostViewedVideos) {
             if (command.getNumber() <= outputTitles.size()) {
                 break;
             }
-            outputTitles.add(title);
+            outputTitles.add(video.getTitle());
         }
+
         return outputTitles;
     }
+
     /**
      * Creates output message and calls method for query
      */
-    public void getQuery(final ActionInputData command, final Database data,
-                         final Writer fileWriter,
-                         final JSONArray arrayResult) throws IOException {
+    public void getQuery(final ActionInputData action, final Database data)
+            throws IOException {
 
-        List<String> bestVideos = createOutputList(command, data);
+        List<String> bestVideos = createOutputList(action, data);
         String outputMessage = "Query result: " + bestVideos;
-        arrayResult.add(fileWriter.writeFile(command.getActionId(),
-                "no field", outputMessage));
+        Utility.getInstance().writeOutputMessage(data, action,
+                outputMessage);
 
     }
 

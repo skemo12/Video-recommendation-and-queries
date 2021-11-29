@@ -6,6 +6,10 @@ import fileio.SerialInputData;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Custom serial class with extra features
+ * Extends custom class Show
+ */
 public final class Serial extends Show {
     /**
      * Number of seasons
@@ -15,7 +19,13 @@ public final class Serial extends Show {
      * Season list
      */
     private ArrayList<Season> seasons;
+    /**
+     * Average grade per each season
+     */
     private List<Double> gradePerSeason;
+    /**
+     * Lists of users who rated for each season.
+     */
     private List<List<User>> ratingUsers;
 
     public int getNumberOfSeasons() {

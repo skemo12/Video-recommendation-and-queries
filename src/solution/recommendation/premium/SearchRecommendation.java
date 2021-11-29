@@ -1,8 +1,6 @@
 package solution.recommendation.premium;
 
 import fileio.ActionInputData;
-import fileio.Writer;
-import org.json.simple.JSONArray;
 import solution.data.Database;
 import solution.data.Show;
 import solution.data.Movie;
@@ -16,45 +14,30 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public final class Search implements RecommendationList {
+/**
+ * Class for search recommendation, used to get search recommendation
+ */
+public final class SearchRecommendation implements RecommendationList {
 
     /**
      * Make it Singleton
      */
-    private static Search search = null;
+    private static SearchRecommendation search = null;
     /**
      * Singleton function
      */
-    public static Search getInstance() {
+    public static SearchRecommendation getInstance() {
         if (search == null) {
-            search = new Search();
+            search = new SearchRecommendation();
         }
         return search;
     }
 
     /**
-     * Searches and returns String video result
+     * Sorts list of shows by rating, and if rating is equals sorts
+     * according name
      */
-    public List<String> searchVideoList(final ActionInputData command,
-                                        final Database data) {
-
-        List<Show> videos = new ArrayList<>();
-        String genre = command.getGenre();
-        User user = Utility.getUtility().getUserByUsername(data.getUsers(),
-                command.getUsername());
-        for (Movie movie : data.getMovies()) {
-            if (!user.getHistory().containsKey(movie.getTitle())
-                    && movie.getGenres().contains(genre)) {
-                videos.add(movie);
-            }
-        }
-        for (Serial serial : data.getSerials()) {
-            if (!user.getHistory().containsKey(serial.getTitle())
-                    && serial.getGenres().contains(genre)) {
-                videos.add(serial);
-            }
-        }
-
+    private List<Show> sortShowsByRating(final List<Show> videos) {
 
         Collections.sort(videos, (o1, o2) -> {
             if (Double.compare(o1.getRating(), o2.getRating()) > 0) {
@@ -66,6 +49,34 @@ public final class Search implements RecommendationList {
             }
 
         });
+        return videos;
+    }
+    /**
+     * Searches and returns String video result
+     */
+    public List<String> searchVideoList(final ActionInputData command,
+                                        final Database data) {
+
+        List<Show> videos = new ArrayList<>();
+        String genre = command.getGenre();
+        User user = Utility.getInstance().getUserByUsername(data.getUsers(),
+                command.getUsername());
+
+        for (Movie movie : data.getMovies()) {
+            if (!user.getHistory().containsKey(movie.getTitle())
+                    && movie.getGenres().contains(genre)) {
+                videos.add(movie);
+            }
+        }
+
+        for (Serial serial : data.getSerials()) {
+            if (!user.getHistory().containsKey(serial.getTitle())
+                    && serial.getGenres().contains(genre)) {
+                videos.add(serial);
+            }
+        }
+
+        videos = sortShowsByRating(videos);
         List<String> titles = new ArrayList<>();
         for (Show video : videos) {
             titles.add(video.getTitle());
@@ -76,24 +87,24 @@ public final class Search implements RecommendationList {
     /**
      * Creates output message and calls method for recommendation
      */
-    public void getRecommendation(final ActionInputData command,
-                                  final Database data, final Writer fileWriter,
-                                  final JSONArray arrayResult)
-            throws IOException {
+    public void getRecommendation(final ActionInputData action,
+                                  final Database data) throws IOException {
 
-        if (!CheckPremium.getInstance().checkPremium(command, data)) {
+        if (!CheckPremium.getInstance().checkPremium(action, data)) {
             String outputMessage = "SearchRecommendation cannot be applied!";
-            arrayResult.add(fileWriter.writeFile(command.getActionId(),
-                    "no field", outputMessage));
+            Utility.getInstance().writeOutputMessage(data, action,
+                    outputMessage);
             return;
         }
-        List<String> video = searchVideoList(command, data);
+
+        List<String> video = searchVideoList(action, data);
         String outputMessage = "SearchRecommendation result: " + video;
+
         if (video.isEmpty()) {
             outputMessage = "SearchRecommendation cannot be applied!";
         }
-        arrayResult.add(fileWriter.writeFile(command.getActionId(),
-                "no field", outputMessage));
 
+        Utility.getInstance().writeOutputMessage(data, action,
+                outputMessage);
     }
 }

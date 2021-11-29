@@ -5,10 +5,19 @@ import fileio.MovieInputData;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Custom movie class with extra features
+ * Extends custom class Show
+ */
 public final class Movie extends Show {
 
+    /**
+     * List of users who rated
+     */
     private List<User> ratingUsers;
-
+    /**
+     * List of ratings values given by users
+     */
     private List<Double> ratingsList;
 
     public Movie(final MovieInputData movie) {

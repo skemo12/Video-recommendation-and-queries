@@ -5,6 +5,9 @@ import fileio.UserInputData;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * Custom user class with extra features
+ */
 public final class User {
     /**
      * User's username

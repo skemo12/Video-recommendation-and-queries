@@ -2,7 +2,7 @@ package solution.query;
 
 import actor.ActorsAwards;
 import fileio.ActionInputData;
-import fileio.ActorInputData;
+import solution.data.Actor;
 import solution.data.Show;
 import utils.Utils;
 
@@ -12,10 +12,28 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * Class for creating Filters variable filters, which has methods for
+ * checking filters on different Object types. Constructor creates filters
+ * variable from command data.
+ */
 public final class Filters {
+
+    /**
+     * List of years filter has
+     */
     private List<Integer> years;
+    /**
+     * List of genres filter has
+     */
     private List<String> genres;
+    /**
+     * List of words filter has
+     */
     private List<String> words;
+    /**
+     * List of awards filter has
+     */
     private List<String> awards;
 
     /**
@@ -97,7 +115,8 @@ public final class Filters {
     /**
      * Check filters for actor
      */
-    public boolean checkActorFilters(final ActorInputData actor) {
+    public boolean checkActorFilters(final Actor actor) {
+
         String description = actor.getCareerDescription();
         Map<ActorsAwards, Integer> awardsMap = actor.getAwards();
 
@@ -123,10 +142,12 @@ public final class Filters {
         }
         return true;
     }
+
     /**
      * Checks whether show has filters
      */
     public boolean checkShowFilters(final Show show) {
+
         if (!this.years.isEmpty()) {
             if (!this.years.contains(show.getYear())) {
                 return false;

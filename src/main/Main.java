@@ -72,7 +72,7 @@ public final class Main {
         JSONArray arrayResult = new JSONArray();
 
         //TODO add here the entry point to your implementation
-        Solution.getSolution().solve(input, fileWriter, arrayResult);
+        Solution.getInstance().solve(input, fileWriter, arrayResult);
         fileWriter.closeJSON(arrayResult);
     }
 }
