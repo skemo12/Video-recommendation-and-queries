@@ -1,20 +1,22 @@
-package solution;
+package solution.data;
 
-import fileio.*;
-import org.json.simple.JSONArray;
-import solution.commands.Rating;
+import fileio.ActionInputData;
+import fileio.ActorInputData;
+import fileio.Input;
+import fileio.MovieInputData;
+import fileio.SerialInputData;
+import fileio.UserInputData;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Database {
+public final class Database {
 
     public List<Movie> getMovies() {
         return movies;
     }
 
-    public void setMovies(List<Movie> movies) {
+    public void setMovies(final List<Movie> movies) {
         this.movies = movies;
     }
 
@@ -22,7 +24,7 @@ public class Database {
         return serials;
     }
 
-    public void setSerials(List<Serial> serials) {
+    public void setSerials(final List<Serial> serials) {
         this.serials = serials;
     }
 
@@ -36,7 +38,7 @@ public class Database {
         return users;
     }
 
-    public void setUsers(List<User> users) {
+    public void setUsers(final List<User> users) {
         this.users = users;
     }
 
@@ -44,7 +46,7 @@ public class Database {
         return actors;
     }
 
-    public void setActors(List<ActorInputData> actors) {
+    public void setActors(final List<ActorInputData> actors) {
         this.actors = actors;
     }
 
@@ -52,22 +54,22 @@ public class Database {
         return actions;
     }
 
-    public void setActions(List<ActionInputData> actions) {
+    public void setActions(final List<ActionInputData> actions) {
         this.actions = actions;
     }
 
     public Database(final Input input) {
 
-        List<Movie> movies = new ArrayList<>();
+        this.movies = new ArrayList<>();
         for (MovieInputData movie : input.getMovies()) {
             Movie newMovie = new Movie(movie);
-            movies.add(newMovie);
+            this.movies.add(newMovie);
         }
 
-        List<Serial> serials = new ArrayList<>();
+        this.serials = new ArrayList<>();
         for (SerialInputData serial : input.getSerials()) {
             Serial newSerial = new Serial(serial);
-            serials.add(newSerial);
+            this.serials.add(newSerial);
         }
         this.users = new ArrayList<>();
         for (UserInputData user : input.getUsers()) {
@@ -75,8 +77,6 @@ public class Database {
         }
         this.actors = input.getActors();
         this.actions = input.getCommands();
-        this.movies = movies;
-        this.serials = serials;
     }
 
 }

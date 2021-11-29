@@ -4,43 +4,48 @@ package solution.query.videos;
 import fileio.ActionInputData;
 import fileio.Writer;
 import org.json.simple.JSONArray;
-import solution.Database;
+import solution.data.Database;
 
 import java.io.IOException;
 
-public class Videos {
+public final class Videos {
     /**
      * Singleton class
      */
     private static Videos videos = null;
+    /**
+     * Singleton function
+     */
     public static Videos getVideos() {
         if (videos == null) {
             videos = new Videos();
         }
         return videos;
     }
-
-    public void checkQuery(final ActionInputData command, Database data,
+    /**
+     * Checks query video type and calls method
+     */
+    public void checkQuery(final ActionInputData command, final Database data,
                            final Writer fileWriter,
                            final JSONArray arrayResult) throws IOException {
 
         if (command.getCriteria().equalsIgnoreCase("ratings")) {
-            RatingQuery.getInstance().ratingQuery(command, data,
+            RatingQuery.getInstance().getQuery(command, data,
                     fileWriter, arrayResult);
         }
 
         if (command.getCriteria().equalsIgnoreCase("favorite")) {
-            FavoriteQuery.getInstance().favoriteQuery(command, data,
+            FavoriteQuery.getInstance().getQuery(command, data,
                     fileWriter, arrayResult);
         }
 
         if (command.getCriteria().equalsIgnoreCase("longest")) {
-            LongestQuery.getInstance().ratingQuery(command, data,
+            LongestQuery.getInstance().getQuery(command, data,
                     fileWriter, arrayResult);
         }
 
         if (command.getCriteria().equalsIgnoreCase("most_viewed")) {
-            MostViewedQuery.getInstance().mostViewedQuery(command, data,
+            MostViewedQuery.getInstance().getQuery(command, data,
                     fileWriter, arrayResult);
         }
     }

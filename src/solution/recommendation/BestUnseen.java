@@ -3,16 +3,27 @@ package solution.recommendation;
 import fileio.ActionInputData;
 import fileio.Writer;
 import org.json.simple.JSONArray;
-import solution.*;
+import solution.data.Database;
+import solution.data.Show;
+import solution.data.Movie;
+import solution.data.Serial;
+import solution.data.User;
+import solution.utility.Utility;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-public class BestUnseen {
+public final class BestUnseen implements RecommendationString {
 
+    /**
+     * Make it Singleton
+     */
     private static BestUnseen bestUnseen = null;
+    /**
+     * Singleton function
+     */
     public static BestUnseen getInstance() {
         if (bestUnseen == null) {
             bestUnseen = new BestUnseen();
@@ -20,9 +31,14 @@ public class BestUnseen {
         return bestUnseen;
     }
 
-    public String searchVideo(ActionInputData command, Database data) {
+    /**
+     * Searches and returns String video result
+     */
+    public String searchVideo(final ActionInputData command,
+                              final Database data) {
         List<Show> videos = new ArrayList<>();
-        User user = Utility.getUtility().getUserByName(data.getUsers(), command.getUsername());
+        User user = Utility.getUtility().getUserByUsername(data.getUsers(),
+                command.getUsername());
         for (Movie movie : data.getMovies()) {
             if (movie.getRating() != 0.0) {
                 videos.add(movie);
@@ -34,26 +50,32 @@ public class BestUnseen {
             }
         }
 
-        Collections.sort(videos, (o1, o2) -> {
+        videos.sort((o1, o2) -> {
             if (Double.compare(o1.getRating(), o2.getRating()) > 0) {
                 return -1;
             } else if (Double.compare(o1.getRating(), o2.getRating()) < 0) {
                 return 1;
-            } else return Utility.getUtility().getDatabaseOrder(o1, o2, data);
+            } else {
+                return Utility.getUtility().getDatabaseOrder(o1, o2, data);
+            }
 
         });
 
         for (Show video : videos) {
-            if (!user.getHistory().containsKey(video.getTitle())){
+            if (!user.getHistory().containsKey(video.getTitle())) {
                 return video.getTitle();
             }
         }
         return Standard.getInstance().searchVideo(command, data);
     }
 
-    public void getRecommendation(final ActionInputData command, Database data,
-                                  final Writer fileWriter,
-                                  final JSONArray arrayResult) throws IOException {
+    /**
+     * Creates output message and calls method for recommendation
+     */
+    public void getRecommendation(final ActionInputData command,
+                                  final Database data, final Writer fileWriter,
+                                  final JSONArray arrayResult)
+            throws IOException {
 
         String video = searchVideo(command, data);
         String outputMessage = "BestRatedUnseenRecommendation result: " + video;

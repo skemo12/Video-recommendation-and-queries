@@ -1,12 +1,10 @@
-package solution;
+package solution.data;
 
 import fileio.ShowInput;
-import fileio.UserInputData;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class Show extends ShowInput{
+public class Show extends ShowInput {
 
     private double rating;
     private int duration;
@@ -14,41 +12,43 @@ public class Show extends ShowInput{
     private int favoriteAddCount;
 
 
-    public int getFavoriteAddCount() {
+    public final int getFavoriteAddCount() {
         return favoriteAddCount;
     }
 
-    public void setFavoriteAddCount(int favoriteAddCount) {
+    public final void setFavoriteAddCount(final int favoriteAddCount) {
         this.favoriteAddCount = favoriteAddCount;
     }
 
 
-    public int getNumberOfViews() {
+    public final int getNumberOfViews() {
         return numberOfViews;
     }
 
-    public void setNumberOfViews(int numberOfViews) {
+    public final void setNumberOfViews(final int numberOfViews) {
         this.numberOfViews = numberOfViews;
     }
 
-    public int getDuration() {
+    public final int getDuration() {
         return duration;
     }
 
-    public void setDuration(int duration) {
+    public final void setDuration(final int duration) {
         this.duration = duration;
     }
 
-    public double getRating() {
+    public final double getRating() {
         return rating;
     }
 
-    public void setRating(double rating) {
+    public final void setRating(final double rating) {
         this.rating = rating;
     }
 
 
-    public Show(String title, int year, ArrayList<String> cast, ArrayList<String> genres, double rating, int duration) {
+    public Show(final String title, final int year,
+                final ArrayList<String> cast, final ArrayList<String> genres,
+                final double rating, final int duration) {
         super(title, year, cast, genres);
         this.rating = rating;
         this.duration = duration;

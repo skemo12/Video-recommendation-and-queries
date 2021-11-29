@@ -4,24 +4,35 @@ import fileio.ActionInputData;
 import fileio.ActorInputData;
 import fileio.Writer;
 import org.json.simple.JSONArray;
-import solution.Database;
+import solution.data.Database;
 import solution.query.Filters;
+import solution.query.QueryInterface;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.ArrayList;
 
-public class FilterDescription {
+public final class FilterDescription implements QueryInterface {
 
+    /**
+     * Make it singleton
+     */
     private static FilterDescription filterDescription = null;
-    public static FilterDescription getFilterDescription() {
+    /**
+     * Singleton function
+     */
+    public static FilterDescription getInstance() {
         if (filterDescription == null) {
             filterDescription = new FilterDescription();
         }
         return filterDescription;
     }
-
-    private List<String> createOutputActors(ActionInputData command,
-                                            Database data) {
+    /**
+     * Method to create output String list
+     */
+    public List<String> createOutputList(final ActionInputData command,
+                                          final Database data) {
 
         List<String> outputActors = new ArrayList<>();
         Filters filters = new Filters(command);
@@ -39,12 +50,14 @@ public class FilterDescription {
         }
         return outputActors;
     }
+    /**
+     * Creates output message and calls method for query
+     */
+    public void getQuery(final ActionInputData command, final Database data,
+                         final Writer fileWriter,
+                         final JSONArray arrayResult) throws IOException {
 
-    public void filterDescription(final ActionInputData command, Database data,
-                            final Writer fileWriter,
-                            final JSONArray arrayResult) throws IOException {
-
-        List<String> bestActors = createOutputActors(command, data);
+        List<String> bestActors = createOutputList(command, data);
         String outputMessage = "Query result: " + bestActors;
         arrayResult.add(fileWriter.writeFile(command.getActionId(),
                 "no field", outputMessage));

@@ -1,17 +1,21 @@
 package solution.query.actors;
 
-import fileio.*;
+import fileio.ActionInputData;
+import fileio.Writer;
 import org.json.simple.JSONArray;
-import solution.Database;
+import solution.data.Database;
 
 import java.io.IOException;
 
-public class Actors {
+public final class Actors {
 
     /**
-     * Singleton class
+     * Make it singleton
      */
     private static Actors actorsQuery = null;
+    /**
+     * Singleton function
+     */
     public static Actors getActorsQuery() {
         if (actorsQuery == null) {
             actorsQuery = new Actors();
@@ -19,23 +23,26 @@ public class Actors {
         return actorsQuery;
     }
 
-
-    public void checkQuery(final ActionInputData command, Database data,
+    /**
+     * Checks query type for actor and calls method
+     */
+    public void checkQuery(final ActionInputData command, final Database data,
                            final Writer fileWriter,
                            final JSONArray arrayResult) throws IOException {
 
         if (command.getCriteria().equalsIgnoreCase("average")) {
-            Average.getAverageQuery().averageQuery(command, data,
+            Average.getInstance().getQuery(command, data,
                     fileWriter, arrayResult);
         }
 
         if (command.getCriteria().equalsIgnoreCase("awards")) {
-            Awards.getAwardsQuery().awardsQuery(command, data,
+            Awards.getInstance().getQuery(command, data,
                     fileWriter, arrayResult);
         }
 
-        if (command.getCriteria().equalsIgnoreCase("filter_description")) {
-            FilterDescription.getFilterDescription().filterDescription(command, data,
+        if (command.getCriteria().
+                equalsIgnoreCase("filter_description")) {
+            FilterDescription.getInstance().getQuery(command, data,
                     fileWriter, arrayResult);
         }
     }

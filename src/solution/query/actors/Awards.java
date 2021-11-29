@@ -5,25 +5,39 @@ import fileio.ActionInputData;
 import fileio.ActorInputData;
 import fileio.Writer;
 import org.json.simple.JSONArray;
-import solution.Database;
-import solution.Utility;
+import solution.data.Database;
+import solution.utility.Utility;
 import solution.query.Filters;
+import solution.query.QueryInterface;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
-public class Awards {
+public final class Awards implements QueryInterface {
 
+    /**
+     * Make it singleton
+     */
     private static Awards awardsQuery = null;
-    public static Awards getAwardsQuery() {
+    /**
+     * Singleton function
+     */
+    public static Awards getInstance() {
         if (awardsQuery == null) {
             awardsQuery = new Awards();
         }
         return awardsQuery;
     }
 
-    private List<String> createOutputActors(ActionInputData command,
-                                            Database data) {
+    /**
+     * Method to create output String list
+     */
+    public List<String> createOutputList(final ActionInputData command,
+                                          final Database data) {
 
         List<String> outputActors = new ArrayList<>();
         Map<String, Integer> totalAwards = new HashMap<>();
@@ -34,9 +48,13 @@ public class Awards {
                 outputActors.add(actor.getName());
 
                 if (totalAwards.containsKey(actor.getName())) {
-                    totalAwards.put(actor.getName(), totalAwards.get(actor.getName()) + Utility.getUtility().getTotalAwardsNumber(actor));
+                    totalAwards.put(actor.getName(),
+                            totalAwards.get(actor.getName())
+                                    + Utility.getUtility().
+                                            getTotalAwardsNumber(actor));
                 } else {
-                    totalAwards.put(actor.getName(), Utility.getUtility().getTotalAwardsNumber(actor));
+                    totalAwards.put(actor.getName(), Utility.getUtility().
+                            getTotalAwardsNumber(actor));
                 }
             }
 
@@ -48,7 +66,9 @@ public class Awards {
                     return 1;
                 } else if (totalAwards.get(o2) > totalAwards.get(o1)) {
                     return -1;
-                } else return o1.compareToIgnoreCase(o2);
+                } else {
+                    return o1.compareToIgnoreCase(o2);
+                }
 
             });
         } else {
@@ -57,18 +77,22 @@ public class Awards {
                     return -1;
                 } else if (totalAwards.get(o2) > totalAwards.get(o1)) {
                     return 1;
-                } else return o2.compareToIgnoreCase(o1);
+                } else {
+                    return o2.compareToIgnoreCase(o1);
+                }
 
             });
         }
         return outputActors;
     }
+    /**
+     * Creates output message and calls method for query
+     */
+    public void getQuery(final ActionInputData command, final Database data,
+                         final Writer fileWriter,
+                         final JSONArray arrayResult) throws IOException {
 
-    public void awardsQuery(final ActionInputData command, Database data,
-                             final Writer fileWriter,
-                             final JSONArray arrayResult) throws IOException {
-
-        List<String> bestActors = createOutputActors(command, data);
+        List<String> bestActors = createOutputList(command, data);
         String outputMessage = "Query result: " + bestActors;
         arrayResult.add(fileWriter.writeFile(command.getActionId(),
                 "no field", outputMessage));

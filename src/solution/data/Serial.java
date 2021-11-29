@@ -1,13 +1,12 @@
-package solution;
+package solution.data;
 
 import entertainment.Season;
 import fileio.SerialInputData;
-import fileio.UserInputData;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Serial extends Show{
+public final class Serial extends Show {
     /**
      * Number of seasons
      */
@@ -23,7 +22,7 @@ public class Serial extends Show{
         return numberOfSeasons;
     }
 
-    public void setNumberOfSeasons(int numberOfSeasons) {
+    public void setNumberOfSeasons(final int numberOfSeasons) {
         this.numberOfSeasons = numberOfSeasons;
     }
 
@@ -31,7 +30,7 @@ public class Serial extends Show{
         return seasons;
     }
 
-    public void setSeasons(ArrayList<Season> seasons) {
+    public void setSeasons(final ArrayList<Season> seasons) {
         this.seasons = seasons;
     }
 
@@ -39,7 +38,7 @@ public class Serial extends Show{
         return gradePerSeason;
     }
 
-    public void setGradePerSeason(List<Double> gradePerSeason) {
+    public void setGradePerSeason(final List<Double> gradePerSeason) {
         this.gradePerSeason = gradePerSeason;
     }
 
@@ -47,11 +46,11 @@ public class Serial extends Show{
         return ratingUsers;
     }
 
-    public void setRatingUsers(List<List<User>> ratingUsers) {
+    public void setRatingUsers(final List<List<User>> ratingUsers) {
         this.ratingUsers = ratingUsers;
     }
 
-    public Serial(SerialInputData serial) {
+    public Serial(final SerialInputData serial) {
         super(serial.getTitle(), serial.getYear(), serial.getCast(),
                 serial.getGenres(), 0.0, 0);
         this.numberOfSeasons = serial.getNumberSeason();
@@ -66,7 +65,8 @@ public class Serial extends Show{
         }
         super.setDuration(0);
         for (int i = 0; i < numberOfSeasons; i++) {
-            super.setDuration(this.seasons.get(i).getDuration() + super.getDuration());
+            super.setDuration(this.seasons.get(i).getDuration()
+                    + super.getDuration());
         }
     }
 }

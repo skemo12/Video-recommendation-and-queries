@@ -1,11 +1,11 @@
-package solution;
+package solution.data;
 
 import fileio.UserInputData;
 
 import java.util.ArrayList;
 import java.util.Map;
 
-public class User {
+public final class User {
     /**
      * User's username
      */
@@ -27,7 +27,7 @@ public class User {
      */
     private int numberOfRatings;
 
-    public User(UserInputData user) {
+    public User(final UserInputData user) {
         this.username = user.getUsername();
         this.subscriptionType = user.getSubscriptionType();
         this.favoriteMovies = user.getFavoriteMovies();
@@ -39,7 +39,7 @@ public class User {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(final String username) {
         this.username = username;
     }
 
@@ -47,7 +47,7 @@ public class User {
         return subscriptionType;
     }
 
-    public void setSubscriptionType(String subscriptionType) {
+    public void setSubscriptionType(final String subscriptionType) {
         this.subscriptionType = subscriptionType;
     }
 
@@ -55,7 +55,7 @@ public class User {
         return history;
     }
 
-    public void setHistory(Map<String, Integer> history) {
+    public void setHistory(final Map<String, Integer> history) {
         this.history = history;
     }
 
@@ -63,7 +63,7 @@ public class User {
         return favoriteMovies;
     }
 
-    public void setFavoriteMovies(ArrayList<String> favoriteMovies) {
+    public void setFavoriteMovies(final ArrayList<String> favoriteMovies) {
         this.favoriteMovies = favoriteMovies;
     }
 
@@ -71,7 +71,7 @@ public class User {
         return numberOfRatings;
     }
 
-    public void setNumberOfRatings(int numberOfRatings) {
+    public void setNumberOfRatings(final int numberOfRatings) {
         this.numberOfRatings = numberOfRatings;
     }
 }

@@ -4,37 +4,47 @@ import fileio.ActionInputData;
 import fileio.ActorInputData;
 import fileio.Writer;
 import org.json.simple.JSONArray;
-import solution.Database;
+import solution.data.Database;
 import solution.commands.Rating;
+import solution.query.QueryInterface;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Average {
+public final class Average implements QueryInterface {
 
+    /**
+     * Make it singleton
+     */
     private static Average averageQuery = null;
-    public static Average getAverageQuery() {
+    /**
+     * Singleton function
+     */
+    public static Average getInstance() {
         if (averageQuery == null) {
             averageQuery = new Average();
         }
         return averageQuery;
     }
 
-    public List<String> createBestActorsList(final ActionInputData command,
-                                             Database data) {
+    /**
+     * Method to create output String list
+     */
+    public List<String> createOutputList(final ActionInputData command,
+                                         final Database data) {
 
         List<String> bestActors = new ArrayList<>();
         int number = command.getNumber();
         class IntPairHelper {
-            public IntPairHelper(double grade, String name) {
+            IntPairHelper(final double grade, final String name) {
                 this.grade = grade;
                 this.name = name;
             }
 
-            double grade;
-            String name;
+            private double grade;
+            private String name;
         }
         List<IntPairHelper> actorsRatings = new ArrayList<>();
         for (ActorInputData actor : data.getActors()) {
@@ -57,9 +67,13 @@ public class Average {
             Collections.sort(actorsRatings, (o1, o2) -> {
                 if (Double.compare(o1.grade, o2.grade) < 0) {
                     return -1;
-                } else if (Double.compare(o1.grade, o2.grade) > 0) {
-                    return 1;
-                } else return o1.name.compareToIgnoreCase(o2.name);
+                } else {
+                    if (Double.compare(o1.grade, o2.grade) > 0) {
+                        return 1;
+                    } else {
+                        return o1.name.compareToIgnoreCase(o2.name);
+                    }
+                }
 
             });
         } else {
@@ -68,7 +82,9 @@ public class Average {
                     return 1;
                 } else if (Double.compare(o1.grade, o2.grade) > 0) {
                     return -1;
-                } else return o2.name.compareToIgnoreCase(o1.name);
+                } else {
+                    return o2.name.compareToIgnoreCase(o1.name);
+                }
 
             });
         }
@@ -84,12 +100,14 @@ public class Average {
 
 
 
+    /**
+     * Creates output message and calls method for query
+     */
+    public void getQuery(final ActionInputData command, final Database data,
+                         final Writer fileWriter,
+                         final JSONArray arrayResult) throws IOException {
 
-    public void averageQuery(final ActionInputData command, Database data,
-                             final Writer fileWriter,
-                             final JSONArray arrayResult) throws IOException {
-
-        List<String> bestActors = createBestActorsList(command, data);
+        List<String> bestActors = createOutputList(command, data);
         String outputMessage = "Query result: " + bestActors;
         arrayResult.add(fileWriter.writeFile(command.getActionId(),
                 "no field", outputMessage));

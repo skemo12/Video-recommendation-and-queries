@@ -3,19 +3,30 @@ package solution.query;
 import actor.ActorsAwards;
 import fileio.ActionInputData;
 import fileio.ActorInputData;
-import solution.Movie;
-import solution.Show;
+import solution.data.Show;
 import utils.Utils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
-public class Filters {
+public final class Filters {
     private List<Integer> years;
     private List<String> genres;
     private List<String> words;
     private List<String> awards;
 
-    public Filters(ActionInputData command) {
+    /**
+     * Constants for filters
+     */
+    public static final int YEARS = 0;
+    public static final int GENRES = 1;
+    public static final int WORDS = 2;
+    public static final int AWARDS = 3;
+
+    public Filters(final ActionInputData command) {
 
         this.years = new ArrayList<>();
         this.genres = new ArrayList<>();
@@ -26,24 +37,24 @@ public class Filters {
         for (int i = 0; i < filters.size(); i++) {
             List<String> filterList = filters.get(i);
 
-            if (i == 0 && filterList != null) {
+            if (i == YEARS && filterList != null) {
                 for (String filter : filterList) {
                     if (filter != null) {
                         this.years.add(Integer.parseInt(filter));
                     }
                 }
             }
-            if (i == 1 && filterList != null) {
+            if (i == GENRES && filterList != null) {
                 for (String filter : filterList) {
                     this.genres.add(filter);
                 }
             }
-            if (i == 2 && filterList != null) {
+            if (i == WORDS && filterList != null) {
                 for (String filter : filterList) {
                     this.words.add(filter);
                 }
             }
-            if (i == 3 && filterList != null) {
+            if (i == AWARDS && filterList != null) {
                 for (String filter : filterList) {
                     this.awards.add(filter);
                 }
@@ -55,7 +66,7 @@ public class Filters {
         return years;
     }
 
-    public void setYears(List<Integer> years) {
+    public void setYears(final List<Integer> years) {
         this.years = years;
     }
 
@@ -63,7 +74,7 @@ public class Filters {
         return genres;
     }
 
-    public void setGenres(List<String> genres) {
+    public void setGenres(final List<String> genres) {
         this.genres = genres;
     }
 
@@ -71,7 +82,7 @@ public class Filters {
         return words;
     }
 
-    public void setWords(List<String> words) {
+    public void setWords(final List<String> words) {
         this.words = words;
     }
 
@@ -79,13 +90,16 @@ public class Filters {
         return awards;
     }
 
-    public void setAwards(List<String> awards) {
+    public void setAwards(final List<String> awards) {
         this.awards = awards;
     }
 
-    public boolean checkActorFilters(ActorInputData actor) {
+    /**
+     * Check filters for actor
+     */
+    public boolean checkActorFilters(final ActorInputData actor) {
         String description = actor.getCareerDescription();
-        Map<ActorsAwards, Integer> awards = actor.getAwards();
+        Map<ActorsAwards, Integer> awardsMap = actor.getAwards();
 
         if (this.words != null) {
             for (String word : this.words) {
@@ -102,26 +116,17 @@ public class Filters {
 
         if (this.awards != null) {
             for (String award : this.awards) {
-                if (!awards.containsKey(Utils.stringToAwards(award))) {
+                if (!awardsMap.containsKey(Utils.stringToAwards(award))) {
                     return false;
                 }
             }
         }
         return true;
     }
-    public Integer getAwardNumberWithFilter(ActorInputData actor) {
-        Map<ActorsAwards, Integer> awards = actor.getAwards();
-        Integer total = 0;
-        if (this.awards != null) {
-            for (String award : this.awards) {
-                if (awards.containsKey(Utils.stringToAwards(award))) {
-                    total += awards.get(Utils.stringToAwards(award));
-                }
-            }
-        }
-        return total;
-    }
-    public boolean checkShowFilters(Show show) {
+    /**
+     * Checks whether show has filters
+     */
+    public boolean checkShowFilters(final Show show) {
         if (!this.years.isEmpty()) {
             if (!this.years.contains(show.getYear())) {
                 return false;

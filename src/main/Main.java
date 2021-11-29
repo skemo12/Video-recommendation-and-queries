@@ -7,7 +7,7 @@ import fileio.Input;
 import fileio.InputLoader;
 import fileio.Writer;
 import org.json.simple.JSONArray;
-import solution.Solution;
+import solution.entryPoint.Solution;
 
 import java.io.File;
 import java.io.IOException;

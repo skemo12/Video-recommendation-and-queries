@@ -3,32 +3,39 @@ package solution.commands;
 import fileio.ActionInputData;
 import fileio.Writer;
 import org.json.simple.JSONArray;
-import solution.Database;
-import solution.User;
-import solution.Utility;
+import solution.data.Database;
+import solution.data.User;
+import solution.utility.Utility;
 
 import java.io.IOException;
 import java.util.Map;
 
 public final class Favorite {
 
-    // make it Singleton
+    /**
+     * Make it Singleton
+     */
     private static Favorite favorite = null;
-    public static Favorite getFavorite() {
+    /**
+     * Singleton function
+     */
+    public static Favorite getInstance() {
         if (favorite == null) {
             favorite = new Favorite();
         }
         return favorite;
     }
-
-    public void addFavorite(final ActionInputData command, Database data,
+    /**
+     * Add movie to favorite and creates output message
+     */
+    public void addFavorite(final ActionInputData command, final Database data,
                             final Writer fileWriter,
                             final JSONArray arrayResult)
             throws IOException {
 
         String username = command.getUsername();
         String title = command.getTitle();
-        User user = Utility.getUtility().getUserByName(data.getUsers(),
+        User user = Utility.getUtility().getUserByUsername(data.getUsers(),
                 username);
         Map<String, Integer> history = user.getHistory();
 

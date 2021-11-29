@@ -1,4 +1,4 @@
-package solution;
+package solution.data;
 
 
 import fileio.ActionInputData;
@@ -44,7 +44,8 @@ public final class Actions {
 
         if (action.getActionType().equalsIgnoreCase("command")) {
             if (action.getType().equalsIgnoreCase("favorite")) {
-                Favorite.getFavorite().addFavorite(action, data, fileWriter, arrayResult);
+                Favorite.getInstance().addFavorite(action, data, fileWriter,
+                        arrayResult);
                 }
 
                 if (action.getType().equalsIgnoreCase("view")) {
@@ -58,7 +59,8 @@ public final class Actions {
                 }
             }
             if (action.getActionType().equalsIgnoreCase("query")) {
-                if (action.getObjectType().equalsIgnoreCase("actors")) {
+                if (action.getObjectType().
+                        equalsIgnoreCase("actors")) {
                     Actors.getActorsQuery().checkQuery(action, data,
                             fileWriter, arrayResult);
                 }
@@ -66,30 +68,35 @@ public final class Actions {
 
             if (action.getActionType().equalsIgnoreCase("query")) {
 
-                if (action.getObjectType().equalsIgnoreCase("movies")) {
+                if (action.getObjectType().
+                        equalsIgnoreCase("movies")) {
                     Videos.getVideos().checkQuery(action, data,
                             fileWriter, arrayResult);
                 }
 
-                if (action.getObjectType().equalsIgnoreCase("shows")) {
+                if (action.getObjectType().
+                        equalsIgnoreCase("shows")) {
                     Videos.getVideos().checkQuery(action, data,
                             fileWriter, arrayResult);
                 }
 
-                if (action.getObjectType().equalsIgnoreCase("users")) {
-                    NumberOfRatingsQuery.getInstance().numberOfRatingsQuery(action, data,
+                if (action.getObjectType().
+                        equalsIgnoreCase("users")) {
+                    NumberOfRatingsQuery.getInstance().getQuery(action, data,
                             fileWriter, arrayResult);
                 }
 
             }
 
-            if (action.getActionType().equalsIgnoreCase("recommendation")) {
+            if (action.getActionType().
+                    equalsIgnoreCase("recommendation")) {
                 if (action.getType().equalsIgnoreCase("standard")) {
-                    Standard.getInstance().getRecomandation(action, data,
+                    Standard.getInstance().getRecommendation(action, data,
                             fileWriter, arrayResult);
                 }
 
-                if (action.getType().equalsIgnoreCase("best_unseen")) {
+                if (action.getType().
+                        equalsIgnoreCase("best_unseen")) {
                     BestUnseen.getInstance().getRecommendation(action, data,
                             fileWriter, arrayResult);
                 }
@@ -99,7 +106,8 @@ public final class Actions {
                             fileWriter, arrayResult);
                 }
                 if (action.getType().equalsIgnoreCase("favorite")) {
-                    FavoriteRecommendation.getInstance().getRecommendation(action, data,
+                    FavoriteRecommendation.getInstance().
+                            getRecommendation(action, data,
                             fileWriter, arrayResult);
                 }
                 if (action.getType().equalsIgnoreCase("search")) {
