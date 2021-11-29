@@ -1,7 +1,53 @@
 -- Tema POO -- Paunoiu Darius Alexandru -- 322CD -- Readme
 
-                --- VideosDB ---
+                            --- VideosDB ---
 
-     Rezolvarea temei se afle in pachetul solution, entry Point-ul din functia
+     - Rezolvarea temei se afle in pachetul solution, entry Point-ul din functia
 main fiind in pachetul entryPoint. Fiecare clasa contine JavaDoc pentru o scurta
-descriere a functionalitati acesteia. 
+descriere a functionalitati acesteia.
+
+    - Clasele ce contin date necesare rezolvarii temei se afla in pachetul data.
+Pentru majoritatea obiectelor de pachetul fileio am facut o clasa custom, ce
+contine camp-uri sau metode extra. Unele obiecte au fost pastrate din fileio,
+deoarece nu am vazut rostul in a creea alt obiect. Clasa Actions se ocupa de
+preluarea actiunilor date de ActionInputData si apelarea metodelor
+corespunzatoare. Deoarece singura clasa ce nu este final din pachetul fileio
+este ShowInput, ea este singura clasa extinsa. Drept consecinta si clasele Movie
+si Serial extind clasa Show, care extinde clasa ShowInput. Restul claselor din
+database sunt concepute de la 0, desi contin multe campuri pe care si clasele
+din fileio le contin.
+
+    - Cele 3 pachete de rezolvare ale actiunilor zise sunt: commands, query si
+recommendation. Pachetul commands contine 3 clase si o interfata dupa care
+cele 3 clase se ghideaza. Pachetul query contine o clasa Filters cu ajutorul
+careia se pot verifica filtrele comenzii si o interfata de tip Query. Toate
+clasele care rezolva o actiune de tip query implementeaza aceasta interfata.
+Pachetul recommendation contine 2 intefete, una care este facuta sa lucreze cu
+return values de tip String, si una facuta sa lucreze cu return values de tip
+lista de Strings. Toate clasele ce rezolva o recomandare implementeaza una din
+cele 2 interfete, in functie de ce tip de return value au.
+
+    - Clasele, infetetele, campurile si metodele folosite au nume sugestive, dar
+am inclus JavaDoc pentru ele. Am inclus JavaDoc si pentru metodele private
+pentru a fi sigur ca totul este clar.
+
+    - Foarte multe clase au design de tip-ul singleton, in special cele care au
+doar metode. Mi se pare o abordare mai buna decat instantiere de noi obiecte
+pentru fiecare apel de functie.
+
+    - Am ales ca database-ul sa nu fie de tip singleton pentru a usura
+putin citirea codului si a scurta din lungimea liniilor si pentru a reduce
+numarul de metode apelate. In schimb, deoarece database ul contine aproape toate
+informatiile necesare rezolvarii cerintelor, ea este transmisa ca parametru.
+
+    - Pachetul Utility ce contine clasa de tip utility contine foarte multe
+metode folosite in foarte multe clase, asa ca am ales sa fac aceasta clasa ce
+contine toate metodele utile in mai mult de una sau doua clase.
+
+    Imporant note: Pe 27 noiembrie, undeva la ora 8 a fost picat github-ul si
+git-ul si nu am stiut si am incercat sa fac un push. Nu stiu exact ce s-a
+intamplat, dar dupa nu am mai putut face push deloc si am fost nevoie sa sterg
+si sa clonez din nou repository-ul. Nu stiu cum arata asta pe fisierele din
+.git, dar inainte de clonare aveam undeva la 3 push-uri, plus celelalte de dupa.
+
+        --- Multumesc frumos pentru feedback! ---
